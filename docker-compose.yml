@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+
+    api.lstools:
+        container_name: api.lstools
+        build:
+            context: ./
+            dockerfile: Dockerfile
+            args:
+                APP_STAGE: ${APP_STAGE}
+                APP_ENV: ${APP_ENV}
+        depends_on:
+            - mysql.lstools
+        environment:
+            TZ: America/Sao_Paulo
+        volumes:
+            - ./:/app
+        ports:
+            - "8002:80"
+        networks:
+            - bubble
+
+    mysql.lstools:
+        container_name: mysql.lstools
+        image: mysql:8
+        command: --max_allowed_packet=512M
+        volumes:
+            - lstools.mysql:/var/lib/mysql
+            - ./docker/mysql:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: lstools
+        ports:
+            - "33061:3306"
+        networks:
+            - bubble
+
+volumes:
+    lstools.mysql:
+
+networks:
+    bubble:
