@@ -59,10 +59,8 @@ class AddressControllerTest extends TestCase
     public function testStore()
     {
         $address = Address::factory()->bh()->make();
-
         $response = $this->post('/api/address', $address->toArray());
-        $response->assertStatus(200);
-
+        $response->assertCreated();
         $data = $response->json();
         $this->assertEquals($address->street, $data['street']);
     }

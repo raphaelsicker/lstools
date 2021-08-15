@@ -38,7 +38,8 @@ class AddressController extends Controller
         $address = $this->model->create($request->all());
 
         return response()->json(
-            $address->toArray()
+            $address->toArray(),
+            JsonResponse::HTTP_CREATED
         );
     }
 
