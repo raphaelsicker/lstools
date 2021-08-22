@@ -18,6 +18,7 @@ class CreateUfsTable extends Migration
             $table->string('name');
             $table->string('uf');
             $table->string('ibge');
+            $table->timestamps();
         });
     }
 

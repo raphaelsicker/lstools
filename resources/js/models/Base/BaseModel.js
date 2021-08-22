@@ -27,17 +27,25 @@ export default class BaseModel {
             .then(response => response.data)
     }
 
+    static async save(data) {
+        if(data.id) {
+            return await this.put(data.id, data)
+        }
+
+        return await this.post(data)
+    }
+
     static async post(data) {
         return axios.post(this.apiUrl, data)
             .then(response => response.data)
     }
 
-    static async put(data = {}) {
-        return axios.put(this.apiUrl, data)
+    static async put(id, data) {
+        return axios.put(this.apiUrl + '/' + id + '?', data)
             .then(response => response.data)
     }
 
-    static async delete(id, config = {}) {
+    static async delete(id, params = {}, config = {}) {
         this.url = this.apiUrl + '/' + id + '?' + querystring.stringify(params)
 
         return axios.delete(this.url, config)

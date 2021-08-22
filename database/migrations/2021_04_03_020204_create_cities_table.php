@@ -20,6 +20,7 @@ class CreateCitiesTable extends Migration
             $table->string('ibge');
 
             $table->foreignIdFor(Uf::class)->constrained();
+            $table->timestamps();
         });
     }
 

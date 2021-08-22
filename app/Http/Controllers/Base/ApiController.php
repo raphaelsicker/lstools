@@ -25,6 +25,9 @@ class ApiController extends Controller
         $query = $this->model->when(
             $request?->filters ?? false,
             fn(Builder $query, $filters) => $query->where($filters)
+        )->when(
+            $request?->search ?? false,
+            fn(Builder $query, $search) => $this->model->makeSearch($query, $search)
         );
 
         $perPage = $request?->per_page ?? $this->defaultPerPage;
@@ -74,11 +77,16 @@ class ApiController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $address = $this->model
-            ->findOrFail($id)
-            ->update($request->all());
+        $model = $this->model->findOrFail($id);
 
-        return response()->json($address);
+        if(!$model->update($request->all())) {
+            return response()->json([
+                'message' => 'Erro ao atualizar o registro'
+            ], 500);
+        }
+
+        $model->refresh();
+        return response()->json($model);
     }
 
     /**

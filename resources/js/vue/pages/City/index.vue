@@ -7,7 +7,7 @@
                     <b-overlay :show="overlay.grid" class="grid-box">
                         <grid-filter
                             @filterClick="abrirModalFiltros"
-                            @newClick="newCity"
+                            @newClick="updateId(null)"
                             @searchClick="runSearch"
                             :opt="{
                                 search: search,
@@ -19,7 +19,7 @@
                             v-for="item in cities.data"
                             v-bind:key="item.id"
                             class="callout-default"
-                            @click="loadForm(item.id)"
+                            @click="updateId(item.id)"
                         >
                             <h6>{{item.name}}</h6>
                             {{item.uf.name}} ({{item.uf.uf}})
@@ -38,7 +38,7 @@
                 </b-col>
                 <b-col lg="8" class="form-content">
                     <b-overlay :show="overlay.form" class="grid-box">
-                        <city-edit v-on:recarregarGrid="search"/>
+                        <city-edit v-model="id" v-on:reloadGrid="runSearch"/>
                     </b-overlay>
                 </b-col>
             </b-row>
@@ -46,7 +46,6 @@
                 :filtro="filter"
                 :filtros="filters"
                 @filtrar="runFilter"/>
-
         </div>
     </section>
 
@@ -89,13 +88,17 @@
         mounted() {
             this.loadGrid()
         },
+        watch: {
+            id: function (newVal) {
+                this.updateHistory(newVal ?? '')
+            }
+        },
         methods: {
             updateHistory(id = '') {
                 history.pushState({}, null, this.url + id);
             },
-            newCity() {
-                this.city = null
-                this.updateHistory();
+            updateId(id) {
+                this.id = id
             },
             async loadGrid(params = {}) {
                 this.overlay.grid = true;
@@ -106,10 +109,10 @@
                     per_page: this.perPage,
                     ...params,
                 })
-                this.overlay = false
+                this.overlay.grid = false
+                this.overlay.form = false
             },
             runFilter() {
-              alert('teste');
                 if(this.filters.uf) {
                     this.filters.uf_id = this.filters.uf.id;
                 }
@@ -118,14 +121,19 @@
                 this.loadGrid({filters: JSON.stringify(this.filters)});
                 this.filters = {};
             },
-            paginate(page) {
+            paginate() {
+                this.current_page
                 this.loadGrid({
                     search: this.search.text,
-                    page: page
+                    page: this.city.current_page
                 });
             },
             runSearch() {
-                this.loadGrid({search: this.search.text});
+                console.log('runsearch')
+                this.loadGrid({
+                    search: this.search.text,
+                    page: this.city.current_page
+                });
             },
             abrirModalFiltros() {
                 this.filter.show = true;
