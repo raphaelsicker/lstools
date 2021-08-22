@@ -62,6 +62,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN docker-php-ext-install zip xml posix ctype pcntl
 
+RUN set -eux \
+    & apk add --no-cache \
+        nodejs \
+        yarn \
+        npm
+
 COPY . /app
 
 COPY docker/config/ /

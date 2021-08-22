@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @mixin Builder
  * @method static count()
  */
-class Model extends \Illuminate\Database\Eloquent\Model
+abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
 
 }

@@ -1,0 +1,260 @@
+.form-control {
+    padding: 0.275rem 0.5rem;
+    font-size: 14px;
+    border-color: #ece8e8;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #d7d8db;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #bec1ca;
+    border-color: #bec1ca;
+}
+
+.btn-secondary:hover {
+    color: #fff;
+    background-color: #a4abbd;
+    border-color: #a4abbd;
+}
+
+.swal2-styled:focus {
+    box-shadow: none !important;
+}
+
+.swal2-styled.swal2-confirm {
+    font-size: 1em !important;
+}
+
+.swal2-title {
+    font-size: 1em !important;
+}
+
+.swal2-content {
+    font-size: 1em !important;
+}
+
+.direction-left{
+    direction: ltr;
+}
+
+.direction-right{
+    direction: rtl;
+}
+
+.form-group {
+    label {
+        margin-bottom: 2px !important;
+        margin-left: 3px;
+        font-size: 14px;
+        color: #1c2d46;
+        font-weight: bold;
+    }
+}
+
+.inner-content {
+    padding: 30px;
+    min-height: calc(100vh - 210px);
+}
+
+.form-content{
+    height: calc(100vh - 113px);
+    overflow-y: auto;
+    direction: rtl;
+
+    >div {
+        direction: ltr;
+    }
+}
+
+.grid-content {
+    padding: 0;
+    height: calc(100vh - 113px);
+    overflow-y: auto;
+    direction: rtl;
+
+    >div {
+        direction: ltr;
+    }
+
+    .grid-box {
+        padding: 15px;
+    }
+
+    .grid-filter {
+        justify-content: space-between;
+        display: flex;
+    }
+
+    .filters-append{
+        margin-left: 5px;
+    }
+}
+
+.grid-box .grid-filter {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f6f6f6;
+}
+
+.table-hover tbody tr:hover {
+    color: #212529;
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.b-table {
+    border: 1px solid #ece8e8;
+    box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+    -webkit-box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+    -moz-box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+}
+
+.table th, .table td {
+    border-top: 1px solid #ececec;
+    padding: 0.5rem;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ececec;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #eee;
+    border-radius: .25rem;
+    box-shadow: 0 3px 9px 0 rgba(169,184,200,.15);
+    -webkit-box-shadow: 0 3px 9px 0 rgba(169,184,200,.15);
+    -moz-box-shadow: 0 3px 9px 0 rgba(169,184,200,.15);
+
+    .row {
+        margin-right: 0;
+        margin-left: 0;
+    }
+}
+
+.card-footer {
+    border-top: 1px solid #eee;
+}
+
+.form-content {
+    border-left: 1px solid #eee;
+    padding: 0;
+
+    .content-title {
+        border-top: 0;
+    }
+
+    .content-fields {
+        padding: 15px;
+    }
+}
+
+.form-field {
+    padding: 5px ;
+    float: left;
+}
+
+.form-field-group > label {
+    margin-bottom: 0;
+}
+
+.nav.panel-list {
+    direction: ltr;
+}
+
+.pagination {
+    margin-top: 10px;
+
+    .page-link {
+        color: #777;
+        font-weight: bold;
+        border: 1px solid #ece8e8;
+        box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+        -webkit-box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+        -moz-box-shadow: 0 3px 9px 0 rgba(169, 184, 200, 0.15);
+    }
+    .page-link:hover {
+        background-color: #bec1caa3;
+        border-color: #aaa0;
+        color: #fff;
+    }
+    .page-item.active .page-link {
+        background-color: #bec1ca;
+        border-color: #7770;
+    }
+    .page-item.disabled .page-link {
+        background-color: #eee;
+        border-color: #ece8e8;
+    }
+}
+
+.modal-header {
+    color: #555;
+}
+
+.btn {
+    font-size: 14px;
+    padding: 0.375rem 0.695rem;
+}
+
+.popover {
+    font-family: 'Ubuntu','Poppins', sans-serif !important;
+}
+
+.multiselect {
+    color: #545557;
+}
+
+.multiselect__tags {
+    min-height: 35px;
+    height: 35px;
+    border: 1px solid #ced4da;
+    padding: 6px 40px 0 8px;
+}
+
+.multiselect__select {
+    width: 25px;
+}
+
+.multiselect__input {
+
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.multiselect__placeholder {
+    padding-top: 0;
+}
+
+.multiselect, .multiselect__input, .multiselect__single {
+    font-size: 14px;
+}
+
+.multiselect__option {
+    padding: 10px;
+    min-height: 30px;
+}

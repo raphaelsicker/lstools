@@ -10,9 +10,43 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@babel/plugin-proposal-class-properties": "^7.10.4",
         "axios": "^0.21",
+        "bootstrap": "^4.5.2",
+        "cross-env": "^7.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "popper.js": "^1.12",
+        "postcss": "^8.1.14",
+        "resolve-url-loader": "^4.0.0",
+        "vue-loader": "^15.9.7",
+        "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
+        "@nuxtjs/axios": "^5.12.2",
+        "@popperjs/core": "^2.4.4",
+        "@vuex-orm/core": "^0.36.3",
+        "@vuex-orm/plugin-axios": "^0.9.3",
+        "bootstrap-vue": "^2.16.0",
+        "jquery": "^3.5.1",
+        "portal-vue": "^2.1.7",
+        "sass": "^1.26.10",
+        "sass-loader": "^8.0.0",
+        "sweetalert2": "^10.0.1",
+        "text-mask-addons": "^3.8.0",
+        "v-mask": "^2.2.3",
+        "vue": "^2.6.14",
+        "vue-multiselect": "^2.1.6",
+        "vue-resource": "^1.5.1",
+        "vue-router": "^3.4.3",
+        "vuex": "^3.5.1"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-env"
+        ],
+        "plugins": [
+            "@babel/plugin-proposal-class-properties"
+        ]
     }
 }
