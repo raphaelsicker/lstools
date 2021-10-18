@@ -24,6 +24,10 @@ class City extends Model
         'uf_id'
     ];
 
+    public $orderBy = [
+        'name' => 'asc'
+    ];
+
     protected $with = ['uf'];
 
     public function uf(): BelongsTo

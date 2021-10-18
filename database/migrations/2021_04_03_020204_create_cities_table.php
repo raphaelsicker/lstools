@@ -17,7 +17,7 @@ class CreateCitiesTable extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('ibge');
+            $table->string('ibge')->nullable();
 
             $table->foreignIdFor(Uf::class)->constrained();
             $table->timestamps();

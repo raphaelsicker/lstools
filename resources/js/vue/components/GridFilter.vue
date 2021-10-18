@@ -5,20 +5,20 @@
             <b-input-group-append>
                 <b-button
                     v-b-popover.hover.top="opt.search.title"
-                    @click="searchClick"
-                ><i class="fas fa-search"></i></b-button>
+                    @click="searchClick">
+                    <i class="fas fa-search"></i>
+                </b-button>
             </b-input-group-append>
         </b-input-group>
         <div class="filters-append">
             <b-button
-                variant="outline-secondary"
                 v-b-popover.hover.top="opt.filter.title"
-                @click="filterClick"
-            ><i class="fas fa-filter"></i></b-button>
+                @click="filterClick">
+                <i class="fas fa-filter"></i>
+            </b-button>
         </div>
         <div class="filters-append">
             <b-button
-                variant="outline-secondary"
                 v-b-popover.hover.top="opt.new.title"
                 @click="newClick"
             ><i class="fas fa-plus"></i></b-button>

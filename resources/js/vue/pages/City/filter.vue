@@ -1,47 +1,54 @@
 <template>
     <b-modal
-        v-model="filtro.exibir"
+        v-model="showFilter"
         title="Filtro :: Cidades"
         cancel-title="Cancelar"
         ok-title="Filtrar"
-        @ok="filtrar"
-        @filtrar="filtrar"
+        @ok="reloadGrid"
+        @filtrar="reloadGrid"
+        @hide="hideFilter"
     >
         <b-form-group
-            id="fieldset-estado"
-            label="Estado"
-            label-for="estado"
-        >
-            <select-estados v-model="filtros.estado"/>
+            id="fieldset-uf"
+            label="UF"
+            label-for="uf">
+            <uf-select v-model="uf" @input="value.uf_id = uf.id"/>
         </b-form-group>
         <b-form-group
             id="fieldset-nome"
             label="Nome"
-            label-for="nome"
-        >
-            <b-form-input id="nome" v-model="filtros.nome" trim/>
+            label-for="name">
+            <b-form-input id="name" v-model="value.name" trim/>
+            <b-form-input id="id" v-model="value.uf_id" trim/>
         </b-form-group>
     </b-modal>
 </template>
 
 <script>
-    import SelectEstados from "../../components/selects/SelectEstados";
+    import UfSelect from "../Uf/select";
     export default {
-        name: "FiltroCidade",
-        components: {SelectEstados},
-        props: {
-            filtro: {
-                required: true,
-                type: Object
-            },
-            filtros: {
-                required: true,
-                type: Object
-            },
+        name: "CityFilter",
+        components: {
+            UfSelect
+        },
+        data() {
+            return {
+                uf: {},
+                showFilter: false
+            }
+        },
+        props: ['value', 'show'],
+        watch: {
+            show: function(newValue) {
+                this.showFilter = newValue
+            }
         },
         methods: {
-            filtrar() {
-                this.$emit('filtrar');
+            reloadGrid() {
+                this.$emit('reloadGrid')
+            },
+            hideFilter() {
+                this.$emit('hide')
             }
         }
     }

@@ -1,67 +1,60 @@
 <template>
-    <b-form @submit.prevent="onSubmit">
-        <input type="hidden" v-model="city.id">
-        <content-title title="Cidades" subTitle="Cadastro" id="divDelete">
-            <b-button
-                variant="success" pill
-                type="submit"
-                v-b-popover.hover.top="'Salvar'"
-                ><i class="fas fa-save"></i></b-button>
-            <b-button
-                id="btnDelete"
-                v-show="city.id"
-                variant="danger" pill
-                v-b-popover.hover.top="'Salvar'"
-                ><i class="fas fa-trash"></i></b-button>
-            <b-popover
-                :show.sync="popoverDelete"
-                target="btnDelete"
-                triggers="click"
-                placement="bottom"
-                >
-                <template v-slot:title>Tem certeza que deseja excluir essa Cidade?</template>
-                <div class="text-right">
-                    <b-button @click="cancelRemove" size="sm" variant="danger">Cancelar</b-button>
-                    <b-button @click="remove" size="sm" variant="info">Excluir</b-button>
-                </div>
-            </b-popover>
-        </content-title>
-        <div class="content-fields">
-            <b-col md="2" class="form-field">
-                <b-form-group
-                    id="fieldset-uf"
-                    label="Estado"
-                    label-for="uf"
-                >
-                    <uf-select v-model="city.uf" @input="updateUf"/>
-                </b-form-group>
-            </b-col>
-            <b-col md="10" class="form-field">
-                <b-form-group
-                    id="fieldset-name"
-                    label="Nome"
-                    label-for="name">
-                    <b-form-input id="nome" v-model="city.name" trim/>
-                </b-form-group>
+    <div id="">
+        <div class="inner-content">
+            <b-row>
+                <b-col class="form-field">
+                    <b-overlay :show="overlay" class="grid-box">
+                        <b-card>
+                            <card-title
+                                title="Cadastro"
+                                subTitle="Edite aqui os dados da Cidade"/>
+                            <b-row>
+                                <b-col md="4" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-uf"
+                                        label="UF"
+                                        label-for="uf">
+                                        <uf-select v-model="city.uf" @input="city.uf_id = city.uf.id"/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="8" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-nome"
+                                        label="Nome"
+                                        label-for="nome">
+                                        <b-form-input id="nome" v-model="city.name" trim/>
+                                    </b-form-group>
+                                </b-col>
+                            </b-row>
+                            <template v-slot:footer>
+                                <b-button variant="info" @click="save">Salvar</b-button>
+                                <b-button variant="danger" v-if="city.id" @click="confirmDelete">Excluir</b-button>
+                            </template>
+                        </b-card>
 
-            </b-col>
+                    </b-overlay>
+                </b-col>
+            </b-row>
         </div>
-    </b-form>
+    </div>
 </template>
 
 <script>
     import ContentTitle from "../../components/ContentTitle";
     import City from "../../../models/City";
     import UfSelect from "../Uf/select";
+    import CardTitle from "../../components/CardTitle";
+    import Swal from "sweetalert2";
 
     export default {
         name: "CityEdit",
-        components: {UfSelect, ContentTitle},
+        components: {CardTitle, UfSelect, ContentTitle},
         props: ['value'],
         data() {
             return {
                 city: City.new(),
                 url: '/cities/',
+                overlay: false,
                 exibirDelete: true,
                 popoverDelete: false,
                 carregandoCidades: false
@@ -90,21 +83,39 @@
             updateUf(uf = {}) {
                 this.city.uf_id = uf.id;
             },
-            onSubmit() {
-                this.city = City.save(this.city)
-                this.alert('Cidade salva com sucesso');
+            async save() {
+                const response = await City.save(this.city)
 
+                if(!response.id) {
+                    return Swal.fire('Erro!', response.message ?? 'Aconteceu um erro ao salvar o registro!', 'error')
+                }
+
+                this.city = response
+                Swal.fire('Sucesso!','Registro atualizado com sucesso!','success')
                 this.$emit('reloadGrid')
                 this.updateHistory(this.city.id ?? '')
             },
-            cancelRemove() {
-                this.popoverDelete = false;
+            confirmDelete() {
+                Swal.fire({
+                    title: "Tem certeza que quer que excluir este registro?",
+                    text: "Não será possível reverter isso!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#ccc',
+                    confirmButtonText: 'Sim, excluir!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.delete()
+                    }
+                })
             },
-            remove() {
+            delete() {
                 this.popoverDelete = false;
                 City.delete(this.city.id);
 
-                this.alert('Cidade removida com sucesso');
+                Swal.fire('Sucesso!', 'Cidade removida com sucesso', 'success')
                 this.city = City.new();
 
                 this.$emit('reloadGrid')
@@ -112,17 +123,6 @@
             },
             updateHistory(id = '') {
                 history.pushState({}, null, this.url + id);
-            },
-            alert(
-                mensagem,
-                variant = 'success',
-                title = 'Sucesso!'
-            ) {
-                this.$bvToast.toast(mensagem, {
-                    title,
-                    variant: variant,
-                    solid: true
-                })
             }
         }
     }

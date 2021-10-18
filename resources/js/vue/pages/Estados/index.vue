@@ -50,8 +50,8 @@
 
 <script>
 import ContentTitle from "../../components/ContentTitle";
-import Estado from "../../../models2/Estado";
 import GridFilter from "../../components/GridFilter";
+import Uf from "../../../models/Uf";
 export default {
     name: "Estados",
     components: {GridFilter, ContentTitle},
@@ -59,12 +59,12 @@ export default {
         return {
             fields: [
                 {
-                    key: 'sigla',
+                    key: 'uf',
                     label: 'Sigla',
                     sortable: true
                 },
                 {
-                    key: 'nome',
+                    key: 'name',
                     label: 'Nome',
                     sortable: true
                 }
@@ -84,14 +84,17 @@ export default {
         async load(params = {}) {
             this.overlay = true;
 
-            this.results = await Estado.get({
+            this.results = await Uf.get({
                 search: this.search,
                 page: this.page,
                 per_page: params.perPage,
                 ...params,
             })
 
-            this.items = this.results.data
+            this.items = this.results.data;
+
+            console.log('item', this.items)
+
             this.overlay = false
         },
 

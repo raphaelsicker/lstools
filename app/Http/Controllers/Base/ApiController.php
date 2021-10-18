@@ -24,11 +24,15 @@ class ApiController extends Controller
     {
         $query = $this->model->when(
             $request?->filters ?? false,
-            fn(Builder $query, $filters) => $query->where($filters)
+            fn(Builder $query, $filters) => $query->where(json_decode($filters, true))
         )->when(
             $request?->search ?? false,
             fn(Builder $query, $search) => $this->model->makeSearch($query, $search)
         );
+
+        foreach($this->model->orderBy ?? [] as $orderBy => $direction) {
+            $query->orderBy($orderBy, $direction);
+        }
 
         $perPage = $request?->per_page ?? $this->defaultPerPage;
 
@@ -47,10 +51,11 @@ class ApiController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $address = $this->model->create($request->all());
+        $model = $this->model->create($request->all());
+        $model = $model->find($model->id);
 
         return response()->json(
-            $address->toArray(),
+            $model->toArray(),
             JsonResponse::HTTP_CREATED
         );
     }

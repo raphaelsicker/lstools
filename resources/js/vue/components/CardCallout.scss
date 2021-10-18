@@ -1,9 +1,10 @@
 .callout {
     padding: 15px;
-    margin: 10px 0;
-    border: 1px solid #ced4da;
-    border-left-width: 5px;
-    border-radius: 3px;
+    margin: 3px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fefefe;
+    -webkit-box-shadow: 0 5px 8px 0 rgba(169, 184, 200, 0.21);
     h4 {
         margin-top: 0;
         margin-bottom: 5px;
@@ -23,11 +24,16 @@
     }
 }
 
+.callout.active {
+    background-color: #cbced7;
+}
+.callout.active:hover {
+    background-color: #b0b4bf;
+}
+
 .callout:hover{
     cursor: pointer;
-    color: #fff;
-    background-color: #b8bac1;
-    border-color: #98a0a6;
+    background-color: #dfe1e8;
 
     h4 {
         color: #fff;
@@ -45,7 +51,6 @@ $colors: (
 
 @each $name, $color in $colors{
     .callout-#{$name} {
-        border-left-color: $color;
         h4 {
             color: $color;
         }

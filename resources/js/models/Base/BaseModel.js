@@ -14,8 +14,8 @@ export default class BaseModel {
             return await axios.get(this.apiUrl, config)
                 .then(response => response.data);
         }
+        
         const url = this.apiUrl + '?' + querystring.stringify(params)
-
         return await axios.get(url, config)
             .then(response => response.data);
     }
@@ -38,11 +38,13 @@ export default class BaseModel {
     static async post(data) {
         return axios.post(this.apiUrl, data)
             .then(response => response.data)
+            .catch(response => response)
     }
 
     static async put(id, data) {
         return axios.put(this.apiUrl + '/' + id + '?', data)
             .then(response => response.data)
+            .catch(response => response)
     }
 
     static async delete(id, params = {}, config = {}) {

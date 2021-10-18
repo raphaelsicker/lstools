@@ -68,11 +68,12 @@ export default {
             this.results = await Estado.find(this.id)
             this.overlay = false;
 
+            return;
+
             if(!this.results.id) {
                 Swal.fire('Oops...', this.results.data.error, 'error')
                 this.$router.push({name: 'cadastros.estados'})
             }
-
         },
 
         async save() {

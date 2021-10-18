@@ -1,7 +1,7 @@
 .form-control {
     padding: 0.275rem 0.5rem;
     font-size: 14px;
-    border-color: #ece8e8;
+    border-color: #ddd;
 }
 
 .form-control:focus {
@@ -15,14 +15,14 @@
 
 .btn-secondary {
     color: #fff;
-    background-color: #bec1ca;
-    border-color: #bec1ca;
+    background-color: #a0a7bb;
+    border-color: #a0a7bb;
 }
 
 .btn-secondary:hover {
     color: #fff;
-    background-color: #a4abbd;
-    border-color: #a4abbd;
+    background-color: #3498db;
+    border-color: #3498db;
 }
 
 .swal2-styled:focus {
@@ -60,13 +60,12 @@
 }
 
 .inner-content {
-    padding: 30px;
-    min-height: calc(100vh - 210px);
+    padding: 15px;
+    //min-height: calc(100vh - 210px);
 }
 
 .form-content{
-    height: calc(100vh - 113px);
-    overflow-y: auto;
+    //height: calc(100vh - 113px);
     direction: rtl;
 
     >div {
@@ -76,8 +75,7 @@
 
 .grid-content {
     padding: 0;
-    height: calc(100vh - 113px);
-    overflow-y: auto;
+    //height: calc(100vh - 113px);
     direction: rtl;
 
     >div {
@@ -91,6 +89,7 @@
     .grid-filter {
         justify-content: space-between;
         display: flex;
+        margin-bottom: 10px;
     }
 
     .filters-append{
@@ -132,7 +131,7 @@
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -15px;
+    margin-right: -10px;
     margin-left: -15px;
 }
 
@@ -144,7 +143,7 @@
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
     border-radius: .25rem;
     box-shadow: 0 3px 9px 0 rgba(169,184,200,.15);
     -webkit-box-shadow: 0 3px 9px 0 rgba(169,184,200,.15);
@@ -153,15 +152,22 @@
     .row {
         margin-right: 0;
         margin-left: 0;
+        margin-top: 10px;
     }
 }
 
 .card-footer {
-    border-top: 1px solid #eee;
+    border-top: 1px solid #ddd;
+    background-color: #eee;
+}
+
+.main-content-title {
+    padding: 30px 10px 30px !important;
+    border-bottom: 1px solid #ddd;
+    background-color: #fefefe;
 }
 
 .form-content {
-    border-left: 1px solid #eee;
     padding: 0;
 
     .content-title {
@@ -174,7 +180,7 @@
 }
 
 .form-field {
-    padding: 5px ;
+    padding: 0 5px ;
     float: left;
 }
 
@@ -232,7 +238,7 @@
 .multiselect__tags {
     min-height: 35px;
     height: 35px;
-    border: 1px solid #ced4da;
+    border: 1px solid #ddd;
     padding: 6px 40px 0 8px;
 }
 
@@ -241,7 +247,6 @@
 }
 
 .multiselect__input {
-
     padding: 0;
     margin-bottom: 0;
 }
@@ -257,4 +262,10 @@
 .multiselect__option {
     padding: 10px;
     min-height: 30px;
+}
+
+.multiselect__option--highlight {
+    background: #3498db;
+    outline: none;
+    color: #fff;
 }

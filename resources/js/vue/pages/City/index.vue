@@ -1,12 +1,12 @@
 <template>
     <section id="main-content">
-        <content-title title="Cidades" subTitle="Lista as cidades"/>
+        <main-content-title title="Cidades" subTitle="Lista as cidades"/>
         <div class="inner-content">
             <b-row>
                 <b-col lg="4" class="grid-content">
                     <b-overlay :show="overlay.grid" class="grid-box">
                         <grid-filter
-                            @filterClick="abrirModalFiltros"
+                            @filterClick="openFilterModal"
                             @newClick="updateId(null)"
                             @searchClick="runSearch"
                             :opt="{
@@ -19,8 +19,8 @@
                             v-for="item in cities.data"
                             v-bind:key="item.id"
                             class="callout-default"
-                            @click="updateId(item.id)"
-                        >
+                            :class="item.id == id ? 'active' : '' "
+                            @click="updateId(item.id)">
                             <h6>{{item.name}}</h6>
                             {{item.uf.name}} ({{item.uf.uf}})
                         </card-callout>
@@ -29,7 +29,7 @@
                             v-model="cities.current_page"
                             :total-rows="cities.total"
                             :per-page="cities.per_page"
-                            @change="paginate"
+                            @input="loadGrid"
                             align="center"
                         />
 
@@ -42,28 +42,30 @@
                     </b-overlay>
                 </b-col>
             </b-row>
-            <filtro-cidade
-                :filtro="filter"
-                :filtros="filters"
-                @filtrar="runFilter"/>
+            <city-filter
+                v-model="filters"
+                :show="filter.show"
+                @reloadGrid="runFilter"
+                @hide="filter.show = false"/>
         </div>
     </section>
 
 </template>
 
 <script>
-    import CityEdit from "./edit";
-    import FiltroCidade from "./filter";
-
     import ContentTitle from "../../components/ContentTitle";
     import CardCallout from "../../components/CardCallout";
     import GridFilter from "../../components/GridFilter";
     import City from "../../../models/City";
+    import CityFilter from "./filter";
+    import CityEdit from "./edit";
+    import MainContentTitle from "../../components/MainContentTitle";
 
     export default {
         name: "Cities",
         components: {
-            FiltroCidade,
+            MainContentTitle,
+            CityFilter,
             GridFilter,
             CityEdit,
             CardCallout,
@@ -90,6 +92,7 @@
         },
         watch: {
             id: function (newVal) {
+                console.log('watch',newVal)
                 this.updateHistory(newVal ?? '')
             }
         },
@@ -101,41 +104,37 @@
                 this.id = id
             },
             async loadGrid(params = {}) {
+                this.id = this.$route.params.id || null
                 this.overlay.grid = true;
 
                 this.cities = await City.get({
+                    filters: this.filters,
                     search: this.search,
-                    page: this.page,
+                    page: this.cities.current_page,
                     per_page: this.perPage,
                     ...params,
                 })
+
                 this.overlay.grid = false
                 this.overlay.form = false
             },
             runFilter() {
-                if(this.filters.uf) {
-                    this.filters.uf_id = this.filters.uf.id;
-                }
-                console.log(this.filters);
-
                 this.loadGrid({filters: JSON.stringify(this.filters)});
                 this.filters = {};
             },
             paginate() {
-                this.current_page
                 this.loadGrid({
                     search: this.search.text,
                     page: this.city.current_page
                 });
             },
             runSearch() {
-                console.log('runsearch')
                 this.loadGrid({
                     search: this.search.text,
                     page: this.city.current_page
                 });
             },
-            abrirModalFiltros() {
+            openFilterModal() {
                 this.filter.show = true;
             }
         }
