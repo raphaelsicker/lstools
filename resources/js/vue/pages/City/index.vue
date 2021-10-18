@@ -92,7 +92,6 @@
         },
         watch: {
             id: function (newVal) {
-                console.log('watch',newVal)
                 this.updateHistory(newVal ?? '')
             }
         },

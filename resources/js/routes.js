@@ -27,7 +27,7 @@ export const routes = [
     },
     {
         name: 'cities',
-        path: '/cities',
+        path: '/forms/cities',
         component: Cities,
         children: [{
             path: ':id',

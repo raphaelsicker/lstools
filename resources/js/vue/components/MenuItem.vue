@@ -2,7 +2,7 @@
     <ul class="hoe-sub-menu">
         <li
             v-for="item in menus"
-            :class="item.submenus ? 'hoe-has-menu' : ''">
+            :class="getClass(item)">
             <router-link :to="item.submenus ? '#': item.link ">
                 <span class="menu-text">{{item.name}}</span>
                 <span class="selected"></span>
@@ -20,6 +20,13 @@
         props: {
             menus: {
                 required: true
+            }
+        },
+        methods: {
+            getClass(item) {
+                return item.submenus ? 'hoe-has-menu' : ''
+                    + ' '
+                    + item.link ? 'active' : ''
             }
         }
     }

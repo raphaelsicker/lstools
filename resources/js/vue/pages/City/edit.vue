@@ -70,7 +70,6 @@
         },
         methods: {
             async load(id) {
-                console.log('id', id)
                 this.city = id ? await City.find(id) : City.new();
             },
             fill(city = []) {

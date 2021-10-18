@@ -14,7 +14,7 @@ export default class BaseModel {
             return await axios.get(this.apiUrl, config)
                 .then(response => response.data);
         }
-        
+
         const url = this.apiUrl + '?' + querystring.stringify(params)
         return await axios.get(url, config)
             .then(response => response.data);

@@ -3067,6 +3067,7 @@ body {
 }
 #hoe-left-panel .profile-box .media {
   position: relative;
+  margin-top: 50px;
 }
 #hoe-left-panel .profile-box .media a {
   margin-top: 2px;

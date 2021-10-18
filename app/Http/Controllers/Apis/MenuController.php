@@ -17,17 +17,34 @@ class MenuController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-
         $menus = [
-            'chave' => 'home',
-            'name' => 'Home',
-            'pai' => '',
-            'link' => '/',
-            'exibir_no_menu' => true,
-            'padrao' => 'e',
-            'icon' => 'fa fa-home',
+            [
+                'key' => 'home',
+                'name' => 'Home',
+                'link' => '/',
+                'is_menu' => true,
+                'default' => 'e',
+                'icon' => 'fa fa-home',
+            ],
+            [
+                'key' => 'forms',
+                'name' => 'Cadastros',
+                'is_menu' => true,
+                'default' => 'e',
+                'link' => '/forms',
+                'icon' => 'fa fa-list',
+                'submenus' => [
+                    [
+                        'key' => 'cities',
+                        'name' => 'Cidades',
+                        'link' => '/forms/cities',
+                        'is_menu' => true,
+                        'default' => 'e',
+                    ]
+                ]
+            ],
         ];
 
-        return response()->json([$menus]);
+        return response()->json($menus);
     }
 }

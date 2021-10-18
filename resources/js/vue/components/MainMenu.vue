@@ -1,8 +1,7 @@
 <template>
     <ul class="nav panel-list">
-        <li
-            v-for="item in menus"
-            :class="item.submenus ? 'hoe-has-menu' : ''">
+        <li v-for="item in menus"
+            :class="getClass(item)">
             <router-link :to="item.submenus ? '#': item.link">
                 <i :class="item.icon"></i>
                 <span class="menu-text">{{item.name}}</span>
@@ -10,14 +9,15 @@
             </router-link>
             <menu-item
                 v-if="item.submenus"
-                :menus="item.submenus"/>
+                :menus="item.submenus"
+            />
         </li>
     </ul>
 </template>
 
 <script>
-    import Acessos from "../../domain/Acessos";
     import MenuItem from "./MenuItem";
+    import Menu from "../../models/Menu";
 
     export default {
         name: "MainMenu",
@@ -27,23 +27,32 @@
                 menus: {}
             }
         },
-        beforeCreate() {
-            Acessos.menus()
-                .then(reposta =>{
-                    this.menus = reposta.data;
+        async beforeCreate() {
+            this.menus = await Menu.get()
 
-                    this.$nextTick(() => {
-                        this.carregarHoeScript();
-                    })
-                });
+            this.$nextTick(() => {
+                this.loadHoeScript();
+            })
         },
         methods: {
-            carregarHoeScript() {
+            loadHoeScript() {
                 let newHoe = document.createElement('script');
                 newHoe.src = '/js/menu/hoe.js';
 
                 let oldHoe = document.getElementById('app-script');
                 oldHoe.parentNode.insertBefore(newHoe, oldHoe.nextSibling);
+            },
+            getClass(item) {
+                let active = false
+                let link = item.link.replace('/', '')
+
+                for(let path of location.pathname.split('/')) {
+                    if(path !== '' && path === link) {
+                        active = true
+                    }
+                }
+
+                return (item.submenus ? 'hoe-has-menu' : '') + ' ' + (active ? 'opened' : '')
             }
         }
     }
