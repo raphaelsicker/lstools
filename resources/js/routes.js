@@ -39,58 +39,6 @@ export const routes = [
             component: Ufs
         }]
     },
-
-
-
-
-
-    {
-        name: 'cadastros.estados',
-        path: '/cadastros/estados',
-        component: Estados,
-    },
-    {
-        name: 'cadastros.estados.edit',
-        path: '/cadastros/estados/:id',
-        component: Estado
-    },
-
-    {
-        name: 'cadastros.bairros',
-        path: '/cadastros/bairros',
-        component: Bairros,
-        children: [{
-            path: ':id',
-            component: Bairros
-        }]
-    },
-        {
-        name: 'cadastros.localidades',
-        path: '/cadastros/localidades',
-        component: Localidades,
-        children: [{
-            path: ':id',
-            component: Localidades
-        }]
-    },
-    {
-        name: 'congregacao.privilegios',
-        path: '/congregacao/privilegios',
-        component: Privilegios,
-        children: [{
-            path: ':id',
-            component: Privilegios
-        }]
-    },
-    {
-        name: 'pregacao.saidas_de_campo',
-        path: '/pregacao/saidas_de_campo',
-        component: SaidasDeCampo,
-        children: [{
-            path: ':id',
-            component: SaidasDeCampo
-        }]
-    }
 ];
 
 
