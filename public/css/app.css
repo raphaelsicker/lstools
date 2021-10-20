@@ -3067,7 +3067,8 @@ body {
 }
 #hoe-left-panel .profile-box .media {
   position: relative;
-  margin-top: 50px;
+  margin-top: 55px;
+  margin-bottom: 5px;
 }
 #hoe-left-panel .profile-box .media a {
   margin-top: 2px;
@@ -3759,6 +3760,13 @@ body[theme-bg="bg9"] {
   border-color: #3498db;
 }
 
+.btn-secondary:active,
+.btn-secondary:focus,
+.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: #a0a7bb;
+  border-color: #a0a7bb;
+}
+
 .swal2-styled:focus {
   box-shadow: none !important;
 }
@@ -3885,7 +3893,7 @@ body[theme-bg="bg9"] {
 }
 
 .main-content-title {
-  padding: 30px 10px 30px !important;
+  padding: 20px 10px !important;
   border-bottom: 1px solid #ddd;
   background-color: #fefefe;
 }
@@ -3940,6 +3948,11 @@ body[theme-bg="bg9"] {
 
 .modal-header {
   color: #555;
+}
+
+.modal-title {
+  color: #000;
+  font-size: 16px;
 }
 
 .btn {

@@ -24,9 +24,9 @@
         },
         methods: {
             getClass(item) {
-                return item.submenus ? 'hoe-has-menu' : ''
+                return (item.submenus ? 'hoe-has-menu' : '')
                     + ' '
-                    + item.link ? 'active' : ''
+                    + (location.pathname.includes(item.link) ? 'active' : '')
             }
         }
     }

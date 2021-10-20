@@ -53,7 +53,7 @@
         data() {
             return {
                 city: City.new(),
-                url: '/cities/',
+                url: '/forms/cities/',
                 overlay: false,
                 exibirDelete: true,
                 popoverDelete: false,
@@ -72,13 +72,6 @@
             async load(id) {
                 this.city = id ? await City.find(id) : City.new();
             },
-            fill(city = []) {
-                for(let campo in city) {
-                    this.cidade[campo] = city[campo] ?? null;
-                }
-                this.updateHistory(city.id ?? '');
-                this.$emit('reloadGrid');
-            },
             updateUf(uf = {}) {
                 this.city.uf_id = uf.id;
             },
@@ -91,8 +84,8 @@
 
                 this.city = response
                 Swal.fire('Sucesso!','Registro atualizado com sucesso!','success')
+                this.$router.push(this.url + this.city.id)
                 this.$emit('reloadGrid')
-                this.updateHistory(this.city.id ?? '')
             },
             confirmDelete() {
                 Swal.fire({
@@ -117,8 +110,8 @@
                 Swal.fire('Sucesso!', 'Cidade removida com sucesso', 'success')
                 this.city = City.new();
 
+                this.$router.push(this.url)
                 this.$emit('reloadGrid')
-                this.updateHistory('')
             },
             updateHistory(id = '') {
                 history.pushState({}, null, this.url + id);

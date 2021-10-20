@@ -22,19 +22,23 @@ class ApiController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->model->when(
-            $request?->filters ?? false,
-            fn(Builder $query, $filters) => $query->where(json_decode($filters, true))
-        )->when(
-            $request?->search ?? false,
-            fn(Builder $query, $search) => $this->model->makeSearch($query, $search)
-        );
+        $query = $this->model::query();
 
-        foreach($this->model->orderBy ?? [] as $orderBy => $direction) {
+        if($filters = $request->filters ?: false) {
+            $query->where(json_decode($filters, true));
+        }
+
+        if($search = $request->search ?: false) {
+            $query = $this->model->makeSearch($query, $search);
+        }
+
+        $orderBys = json_decode($request->orderBy ?? "{}", true);
+
+        foreach($orderBys as $orderBy => $direction) {
             $query->orderBy($orderBy, $direction);
         }
 
-        $perPage = $request?->per_page ?? $this->defaultPerPage;
+        $perPage = $request->per_page ?? $this->defaultPerPage;
 
         if($perPage == "false" || $perPage === false) {
             return response()->json($query->get());

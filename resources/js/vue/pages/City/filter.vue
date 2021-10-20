@@ -7,7 +7,7 @@
         @ok="reloadGrid"
         @filtrar="reloadGrid"
         @hide="hideFilter"
-    >
+        @cancel="clearFilter" >
         <b-form-group
             id="fieldset-uf"
             label="UF"
@@ -19,7 +19,6 @@
             label="Nome"
             label-for="name">
             <b-form-input id="name" v-model="value.name" trim/>
-            <b-form-input id="id" v-model="value.uf_id" trim/>
         </b-form-group>
     </b-modal>
 </template>
@@ -49,6 +48,9 @@
             },
             hideFilter() {
                 this.$emit('hide')
+            },
+            clearFilter() {
+                this.$emit('clear')
             }
         }
     }

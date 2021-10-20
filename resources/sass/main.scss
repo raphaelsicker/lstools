@@ -25,6 +25,13 @@
     border-color: #3498db;
 }
 
+.btn-secondary:active,
+.btn-secondary:focus,
+.btn-secondary:not(:disabled):not(.disabled):active  {
+    background-color: #a0a7bb;
+    border-color: #a0a7bb;
+}
+
 .swal2-styled:focus {
     box-shadow: none !important;
 }
@@ -162,7 +169,7 @@
 }
 
 .main-content-title {
-    padding: 30px 10px 30px !important;
+    padding: 20px 10px !important;
     border-bottom: 1px solid #ddd;
     background-color: #fefefe;
 }
@@ -220,6 +227,11 @@
 
 .modal-header {
     color: #555;
+}
+
+.modal-title {
+    color: #000;
+    font-size: 16px;
 }
 
 .btn {

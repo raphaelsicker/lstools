@@ -50,6 +50,8 @@
                     if(path !== '' && path === link) {
                         active = true
                     }
+
+                    //console.log('path', path, 'link', link, 'active', active)
                 }
 
                 return (item.submenus ? 'hoe-has-menu' : '') + ' ' + (active ? 'opened' : '')

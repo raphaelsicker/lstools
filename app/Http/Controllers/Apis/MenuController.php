@@ -40,6 +40,13 @@ class MenuController extends Controller
                         'link' => '/forms/cities',
                         'is_menu' => true,
                         'default' => 'e',
+                    ],
+                    [
+                        'key' => 'ufs',
+                        'name' => 'Estados',
+                        'link' => '/forms/ufs',
+                        'is_menu' => true,
+                        'default' => 'e',
                     ]
                 ]
             ],

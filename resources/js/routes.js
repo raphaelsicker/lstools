@@ -5,7 +5,8 @@ import Estados from "./vue/pages/Estados/index";
 import Estado from "./vue/pages/Estados/edit";
 
 
-import Cities from "./vue/pages/City/index";
+import City from "./vue/pages/City/index";
+import Ufs from "./vue/pages/Uf/index";
 
 
 import Bairros from "./vue/pages/Bairros/index";
@@ -21,17 +22,21 @@ export const routes = [
         component: ContentExemple
     },
     {
-        name: 'teste',
-        path: '/teste',
-        component: Teste
-    },
-    {
         name: 'cities',
         path: '/forms/cities',
-        component: Cities,
+        component: City,
         children: [{
             path: ':id',
-            component: Cities
+            component: City
+        }]
+    },
+    {
+        name: 'ufs',
+        path: '/forms/ufs',
+        component: Ufs,
+        children: [{
+            path: ':id',
+            component: Ufs
         }]
     },
 
