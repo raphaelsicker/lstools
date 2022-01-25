@@ -47,6 +47,13 @@ class MenuController extends Controller
                         'link' => '/forms/ufs',
                         'is_menu' => true,
                         'default' => 'e',
+                    ],
+                    [
+                        'key' => 'service-groups',
+                        'name' => 'Saídas de Campo',
+                        'link' => '/forms/service-groups',
+                        'is_menu' => true,
+                        'default' => 'e',
                     ]
                 ]
             ],

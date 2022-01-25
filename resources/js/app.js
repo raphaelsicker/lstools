@@ -1,6 +1,7 @@
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'vue-swatches/dist/vue-swatches.css';
 
 import Vue from 'vue';
 
@@ -11,13 +12,15 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import Multiselect from "vue-multiselect";
 import store from './vuex';
 import VueMask from 'v-mask';
+import VSwatches from 'vue-swatches';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Router);
 Vue.use(VueMask);
 
-Vue.component('multiselect',Multiselect);
+Vue.component('multiselect', Multiselect)
+Vue.component('swatches', VSwatches)
 
 Vue.config.productionTip = true;
 

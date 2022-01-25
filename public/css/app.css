@@ -4002,3 +4002,7 @@ body[theme-bg="bg9"] {
   outline: none;
   color: #fff;
 }
+
+.vue-swatches__row {
+  line-height: 0;
+}

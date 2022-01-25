@@ -3,6 +3,7 @@
 use App\Http\Controllers\Apis\AddressController;
 use App\Http\Controllers\Apis\MenuController;
 use App\Http\Controllers\Apis\CityController;
+use App\Http\Controllers\Apis\ServiceGroupController;
 use App\Http\Controllers\Apis\UfController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,3 +28,4 @@ Route::get('menus', [MenuController::class, 'index']);
 Route::resource('address', AddressController::class);
 Route::resource('ufs', UfController::class);
 Route::resource('cities', CityController::class);
+Route::resource('service-groups', ServiceGroupController::class);
