@@ -2,14 +2,14 @@
     <multiselect
         v-bind:value="value"
         @input="$emit('input', $event)"
-        :options="ufs"
+        :options="serviceGroup"
         :searchable="true"
         :close-on-select="true"
         :show-labels="false"
-        id="ufs"
-        label="uf"
-        track-by="uf"
-        placeholder="Estados"
+        id="serviceGroups"
+        label="name"
+        track-by="name"
+        placeholder="Saídas de Campo"
     >
         <span slot="noOptions">Nenhuma opção ainda</span>
         <span slot="noResult">Nenhum estado encontrada</span>
@@ -17,14 +17,14 @@
 </template>
 
 <script>
-    import Uf from "../../../models/Uf";
+    import ServiceGroup from "../../../models/ServiceGroup";
 
     export default {
-        name: "UfSelect",
+        name: "ServiceGroupSelect",
         props: ['value'],
         data() {
             return {
-                ufs: []
+                serviceGroup: []
             }
         },
         mounted() {
@@ -32,7 +32,7 @@
         },
         methods: {
             async load() {
-                this.ufs = await Uf.all();
+                this.serviceGroup = await ServiceGroup.all();
             }
         }
     }

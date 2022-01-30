@@ -1,6 +1,6 @@
 <template>
     <section id="main-content">
-        <main-content-title title="Saídas de Campo" subTitle="Lista os grupos de Saída de Campo"/>
+        <main-content-title title="Cartões" subTitle="Lista os Cartões de Mapas da Congregação"/>
         <div class="inner-content">
             <b-row>
                 <b-col lg="4" class="grid-content">
@@ -12,32 +12,23 @@
                             :opt="{
                                 search: search,
                                 filter: {title: 'Filtros'},
-                                new: {title: 'Nova Saída de Campo'},
+                                new: {title: 'Novo Cartão'},
                             }"
                         />
                         <card-callout
-                            v-for="item in serviceGroups.data"
+                            v-for="item in locality.data"
                             v-bind:key="item.id"
                             class="callout-default"
                             :class="item.id === id ? 'active' : '' "
                             @click="updateId(item.id)">
-                            <b-row>
-                                <b-col md="2" class="float-left">
-                                    <div class="callout-color-circle" :style="{
-                                        'background-color': item.color,
-                                         border: getSwatchesBorder(item.color)
-                                    }"/>
-                                </b-col>
-                                <b-col md="10" >
-                                    <h6 >{{item.name}}</h6> {{item.shortname}}
-                                </b-col>
-                            </b-row>
+                                <h6 >{{item.name}}</h6>
+                                Cartões: {{item.cards.length}}
                         </card-callout>
 
                         <b-pagination
-                            v-model="serviceGroups.current_page"
-                            :total-rows="serviceGroups.total"
-                            :per-page="serviceGroups.per_page"
+                            v-model="locality.current_page"
+                            :total-rows="locality.total"
+                            :per-page="locality.per_page"
                             @input="loadGrid"
                             align="center"
                         />
@@ -70,10 +61,10 @@
     import UfFilter from "./filter"
     import UfEdit from "./edit";
     import MainContentTitle from "../../components/MainContentTitle";
-    import ServiceGroup from "../../../models/ServiceGroup";
+    import Locality from "../../../models/Locality";
 
     export default {
-        name: "ServiceGroups",
+        name: "Cards",
         components: {
             UfEdit,
             UfFilter,
@@ -86,7 +77,7 @@
             return {
                 id: this.$route.params.id || null,
                 search: {text: ''},
-                serviceGroups: [],
+                locality: [],
                 ServiceGroup: {},
                 error: [],
                 overlay: {
@@ -95,7 +86,7 @@
                 },
                 filter: {show: false},
                 filters: {},
-                url: '/forms/service-groups/',
+                url: '/maps/cards/',
                 orderBy: {'name': 'asc'}
             }
         },
@@ -118,10 +109,10 @@
                 this.id = this.$route.params.id || null
                 this.overlay.grid = true;
 
-                this.serviceGroups = await ServiceGroup.get({
+                this.locality = await Locality.get({
                     filters: this.filters,
                     search: this.search,
-                    page: this.serviceGroups.current_page,
+                    page: this.locality.current_page,
                     per_page: this.perPage,
                     orderBy: JSON.stringify(this.orderBy),
                     ...params,
@@ -140,14 +131,14 @@
             paginate() {
                 this.loadGrid({
                     search: this.search.text,
-                    page: this.ServiceGroup.current_page
+                    page: this.locality.current_page
                 });
             },
             runSearch() {
                 this.loadGrid({
                     filters: JSON.stringify(this.filters),
                     search: this.search.text,
-                    page: this.ServiceGroup.current_page
+                    page: this.locality.current_page
                 });
             },
             openFilterModal() {

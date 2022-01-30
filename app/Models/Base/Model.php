@@ -20,4 +20,13 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 
         return $query;
     }
+
+    public static function createMany(array $items): array
+    {
+        foreach($items ?? [] as $item) {
+            $created[] = self::create($item);
+        }
+
+        return $created ?? [];
+    }
 }

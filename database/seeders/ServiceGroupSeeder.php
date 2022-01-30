@@ -16,7 +16,7 @@ class ServiceGroupSeeder extends Seeder
     public function run()
     {
         if(App::environment('local')) {
-            ServiceGroup::insert([
+            ServiceGroup::createMany([
                 [
                     'name' => 'Catumbi',
                     'shortname' => 'CA',
@@ -32,7 +32,7 @@ class ServiceGroupSeeder extends Seeder
             return;
         }
 
-        ServiceGroup::insert([
+        ServiceGroup::createMany([
             [
                 'name' => 'Padrão',
                 'shortname' => 'PA',

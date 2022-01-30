@@ -7,47 +7,31 @@
                         <b-card>
                             <card-title
                                 title="Cadastro"
-                                subTitle="Edite aqui os dados da Saída de Campo"/>
+                                subTitle="Edite aqui os dados do Cartão"/>
                             <b-row>
-                                <b-col md="1" class="form-field">
+                                <b-col md="4" class="form-field">
                                     <b-form-group
-                                        id="fieldset-color"
-                                        label="Cor"
-                                        label-for="color">
-
-                                        <swatches
-                                            v-model="serviceGroup.color"
-                                            swatches="text-advanced"
-                                            :trigger-style="{
-                                                width: '35px',
-                                                height: '35px',
-                                                borderRadius: '30px',
-                                                border: getSwatchesBorder(serviceGroup.color)
-                                            }"
-                                        ></swatches>
-
+                                        id="fieldset-service-group"
+                                        label="Saída de Campo"
+                                        label-for="service-group">
+                                        <service-group-select
+                                            v-model="locality.service_group"
+                                            @input="locality.service_group_id = locality.service_group.id"
+                                        />
                                     </b-form-group>
                                 </b-col>
-                                <b-col md="2" class="form-field">
-                                    <b-form-group
-                                        id="fieldset-shortname"
-                                        label="Sigla"
-                                        label-for="shortname">
-                                        <b-form-input id="shortname" v-model="serviceGroup.shortname" trim/>
-                                    </b-form-group>
-                                </b-col>
-                                <b-col md="9" class="form-field">
+                                <b-col md="8" class="form-field">
                                     <b-form-group
                                         id="fieldset-nome"
                                         label="Nome"
                                         label-for="name">
-                                        <b-form-input id="name" v-model="serviceGroup.name" trim/>
+                                        <b-form-input id="name" v-model="locality.name" trim/>
                                     </b-form-group>
                                 </b-col>
                             </b-row>
                             <template v-slot:footer>
                                 <b-button variant="info" @click="save">Salvar</b-button>
-                                <b-button variant="danger" v-if="serviceGroup.id" @click="confirmDelete">Excluir</b-button>
+                                <b-button variant="danger" v-if="locality.id" @click="confirmDelete">Excluir</b-button>
                             </template>
                         </b-card>
 
@@ -62,32 +46,19 @@
     import ContentTitle from "../../components/ContentTitle";
     import CardTitle from "../../components/CardTitle";
     import Swal from "sweetalert2";
-    import ServiceGroup from "../../../models/ServiceGroup";
+    import Locality from "../../../models/Locality";
+    import ServiceGroupSelect from "../ServiceGroup/select";
 
     export default {
         name: "ServiceGroupEdit",
-        components: {CardTitle, ContentTitle},
+        components: {ServiceGroupSelect, CardTitle, ContentTitle},
         props: ['value'],
         data() {
             return {
-                serviceGroup: ServiceGroup.new(),
-                url: '/forms/service-groups/',
+                locality: Locality.new(),
+                url: '/maps/cards/',
                 overlay: false,
-                exibirDelete: true,
-                popoverDelete: false,
-                carregandoCidades: false
-            }
-        },
-        computed: {
-            shortNameState() {
-                return this.serviceGroup.shortname
-                    ? this.serviceGroup.shortname.length > 0
-                    : false
-            },
-            nameState() {
-                return this.serviceGroup.name
-                    ? this.serviceGroup.name.length > 0
-                    : false
+                popoverDelete: false
             }
         },
         created() {
@@ -100,22 +71,18 @@
         },
         methods: {
             async load(id) {
-                this.serviceGroup = id ? await ServiceGroup.find(id) : ServiceGroup.new();
-                this.serviceGroup.color = this.serviceGroup.color ?? "#3d85c6"
-            },
-            updateId(uf = {}) {
-                this.serviceGroup.uf_id = uf.id;
+                this.locality = id ? await Locality.find(id) : Locality.new()
             },
             async save() {
-                const response = await ServiceGroup.save(this.serviceGroup)
+                const response = await Locality.save(this.locality)
 
                 if(!response.id) {
                     return Swal.fire('Erro!', response.message ?? 'Aconteceu um erro ao salvar o registro!', 'error')
                 }
 
-                this.serviceGroup = response
+                this.locality = response
                 Swal.fire('Sucesso!','Registro atualizado com sucesso!','success')
-                this.$router.push(this.url + this.serviceGroup.id)
+                this.$router.push(this.url + this.locality.id)
                 this.$emit('reloadGrid')
             },
             confirmDelete() {
@@ -136,30 +103,16 @@
             },
             delete() {
                 this.popoverDelete = false;
-                ServiceGroup.delete(this.serviceGroup.id);
+                Locality.delete(this.locality.id);
 
                 Swal.fire('Sucesso!', 'Cidade removida com sucesso', 'success')
-                this.serviceGroup = ServiceGroup.new();
+                this.locality = Locality.new();
                 this.$router.push(this.url)
                 this.$emit('reloadGrid')
             },
             updateHistory(id = '') {
                 console.log(id)
                 history.pushState({}, null, this.url + id);
-            },
-            // Cria as bordas para os swatches caso a cor seja muito clara
-            getSwatchesBorder(color = null) {
-                if(!color)
-                    return 'none'
-
-                const red = parseInt(color[1], 16)
-                const blue = parseInt(color[3], 16)
-                const green = parseInt(color[5], 16)
-
-                if(red > 11 && blue > 11 && green > 11)
-                    return '1px solid #ccc'
-
-                return 'none'
             }
         }
     }

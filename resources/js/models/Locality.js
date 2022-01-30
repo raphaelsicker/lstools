@@ -8,7 +8,8 @@ export default class ServiceGroup extends Api {
             id: null,
             name: null,
             service_group_id: null,
-            service_group: {}
+            service_group: {},
+            cards: {}
         }
     }
 }

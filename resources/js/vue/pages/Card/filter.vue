@@ -11,7 +11,10 @@
             id="fieldset-shortname"
             label="Sigla"
             label-for="shortname">
-            <b-form-input id="shortname" v-model="value.shortname" trim/>
+            <service-group-select
+                v-model="service_group"
+                @input="value.service_group_id = service_group.id"
+            />
         </b-form-group>
         <b-form-group
             id="fieldset-nome"
@@ -23,11 +26,13 @@
 </template>
 
 <script>
+    import ServiceGroupSelect from "../ServiceGroup/select";
     export default {
         name: "ServiceGroupFilter",
-        components: {},
+        components: {ServiceGroupSelect},
         data() {
             return {
+                service_group: {},
                 showFilter: false
             }
         },
