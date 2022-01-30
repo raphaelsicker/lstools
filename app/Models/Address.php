@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int id
  * @property string street
- * @property string name
+ * @property string number
  * @property string complement
  * @property string reference
  * @property string district
@@ -20,8 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property City city
  * @property Card card
- *
- * @property Uf uf
  */
 class Address extends Model
 {
@@ -39,7 +37,10 @@ class Address extends Model
         'card_id'
     ];
 
-    protected $with = ['city'];
+    protected $with = [
+        'city',
+        'card'
+    ];
 
     public function city(): BelongsTo
     {

@@ -22,6 +22,8 @@ class Card extends Model
         'locality_id',
     ];
 
+    protected $with = ['locality'];
+
     public function locality(): BelongsTo
     {
         return $this->belongsTo(Locality::class);

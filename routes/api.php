@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Apis\AddressController;
+use App\Http\Controllers\Apis\CardController;
+use App\Http\Controllers\Apis\LocalityController;
 use App\Http\Controllers\Apis\MenuController;
 use App\Http\Controllers\Apis\CityController;
 use App\Http\Controllers\Apis\ServiceGroupController;
@@ -25,7 +27,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('menus', [MenuController::class, 'index']);
 
-Route::resource('address', AddressController::class);
-Route::resource('ufs', UfController::class);
+//Resources
+Route::resource('addresses', AddressController::class);
+Route::resource('cards', CardController::class);
 Route::resource('cities', CityController::class);
+Route::resource('localities', LocalityController::class);
 Route::resource('service-groups', ServiceGroupController::class);
+Route::resource('ufs', UfController::class);
+
+

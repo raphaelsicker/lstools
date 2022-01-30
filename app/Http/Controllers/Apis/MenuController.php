@@ -54,9 +54,34 @@ class MenuController extends Controller
                         'link' => '/forms/service-groups',
                         'is_menu' => true,
                         'default' => 'e',
-                    ]
-                ]
+                    ],
+
+                ],
             ],
+            [
+                'key' => 'maps',
+                'name' => 'Território',
+                'is_menu' => true,
+                'default' => 'e',
+                'link' => '/maps',
+                'icon' => 'fa fa-map',
+                'submenus' => [
+                    [
+                        'key' => 'cards',
+                        'name' => 'Cartões',
+                        'link' => '/maps/cards',
+                        'is_menu' => true,
+                        'default' => 'e',
+                    ],
+                    [
+                        'key' => 'Address',
+                        'name' => 'Endereços',
+                        'link' => '/maps/addresses',
+                        'is_menu' => true,
+                        'default' => 'e',
+                    ],
+                ]
+            ]
         ];
 
         return response()->json($menus);
