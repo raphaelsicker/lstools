@@ -4006,3 +4006,14 @@ body[theme-bg="bg9"] {
 .vue-swatches__row {
   line-height: 0;
 }
+
+.vue-swatches--is-empty {
+  border: 1px solid #ccc !important;
+}
+
+.callout-color-circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 30px;
+  border: medium none;
+}

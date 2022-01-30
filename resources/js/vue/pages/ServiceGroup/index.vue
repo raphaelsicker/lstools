@@ -12,7 +12,7 @@
                             :opt="{
                                 search: search,
                                 filter: {title: 'Filtros'},
-                                new: {title: 'Novo Estado'},
+                                new: {title: 'Nova Saída de Campo'},
                             }"
                         />
                         <card-callout
@@ -21,7 +21,17 @@
                             class="callout-default"
                             :class="item.id === id ? 'active' : '' "
                             @click="updateId(item.id)">
-                            <h6 style="display: inline-block">{{item.name}}</h6> ({{item.uf}})
+                            <b-row>
+                                <b-col md="2" class="float-left">
+                                    <div class="callout-color-circle" :style="{
+                                        'background-color': item.color,
+                                         border: getSwatchesBorder(item.color)
+                                    }"/>
+                                </b-col>
+                                <b-col md="10" >
+                                    <h6 >{{item.name}}</h6> {{item.shortname}}
+                                </b-col>
+                            </b-row>
                         </card-callout>
 
                         <b-pagination
@@ -35,7 +45,7 @@
                       {{ error.message }}
                     </b-overlay>
                 </b-col>
-                <b-col lg="8" class="form-content">
+                <b-col lg="8">
                     <b-overlay :show="overlay.form" class="grid-box">
                         <uf-edit v-model="id" v-on:reloadGrid="runSearch"/>
                     </b-overlay>
@@ -85,7 +95,7 @@
                 },
                 filter: {show: false},
                 filters: {},
-                url: '/forms/service-group/',
+                url: '/forms/service-groups/',
                 orderBy: {'name': 'asc'}
             }
         },
@@ -143,6 +153,20 @@
             openFilterModal() {
                 this.filter.show = true
                 this.search.text = ''
+            },
+            // Cria as bordas para os swatches caso a cor seja muito clara
+            getSwatchesBorder(color = null) {
+                if(!color)
+                    return 'none'
+
+                const red = parseInt(color[1], 16)
+                const blue = parseInt(color[3], 16)
+                const green = parseInt(color[5], 16)
+
+                if(red > 11 && blue > 11 && green > 11)
+                    return '1px solid #ccc'
+
+                return 'none'
             }
         }
     }

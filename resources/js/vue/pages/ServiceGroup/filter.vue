@@ -1,17 +1,17 @@
 <template>
     <b-modal
         v-model="showFilter"
-        title="Filtro :: Estados"
+        title="Filtro :: Saídas de Campo"
         cancel-title="Cancelar"
         ok-title="Filtrar"
         @ok="reloadGrid"
         @hide="hideFilter"
         @cancel="clearFilter" >
         <b-form-group
-            id="fieldset-uf"
-            label="UF"
-            label-for="uf">
-            <b-form-input id="uf" v-model="value.uf" trim/>
+            id="fieldset-shortname"
+            label="Sigla"
+            label-for="shortname">
+            <b-form-input id="shortname" v-model="value.shortname" trim/>
         </b-form-group>
         <b-form-group
             id="fieldset-nome"
@@ -24,7 +24,7 @@
 
 <script>
     export default {
-        name: "UfFilter",
+        name: "ServiceGroupFilter",
         components: {},
         data() {
             return {

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int id
  * @property string name
  * @property string shortname
+ * @property string color
  *
  * @mixin Builder
  */
@@ -17,7 +18,8 @@ class ServiceGroup extends Model
     protected $fillable = [
         'id',
         'name',
-        'shortname'
+        'shortname',
+        'color'
     ];
 
     public $orderBy = [

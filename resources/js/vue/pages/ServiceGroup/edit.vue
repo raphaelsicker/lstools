@@ -9,38 +9,39 @@
                                 title="Cadastro"
                                 subTitle="Edite aqui os dados da Saída de Campo"/>
                             <b-row>
-                                <b-col md="5" class="form-field">
-                                    <b-form-group
-                                        id="fieldset-nome"
-                                        label="Nome"
-                                        label-for="nome">
-                                        <b-form-input id="nome" v-model="serviceGroup.name" trim/>
-                                    </b-form-group>
-                                </b-col>
-                                <b-col md="5" class="form-field">
-                                    <b-form-group
-                                        id="fieldset-shortnome"
-                                        label="Sigla"
-                                        label-for="shortnome">
-                                        <b-form-input id="shortnome" v-model="serviceGroup.shortname" trim/>
-                                    </b-form-group>
-                                </b-col>
-                                <b-col md="5" class="form-field">
+                                <b-col md="1" class="form-field">
                                     <b-form-group
                                         id="fieldset-color"
                                         label="Cor"
                                         label-for="color">
 
+                                        <swatches
+                                            v-model="serviceGroup.color"
+                                            swatches="text-advanced"
+                                            :trigger-style="{
+                                                width: '35px',
+                                                height: '35px',
+                                                borderRadius: '30px',
+                                                border: getSwatchesBorder(serviceGroup.color)
+                                            }"
+                                        ></swatches>
 
-
-                                        <div class="input-group mb-3">
-
-                                            <swatches v-model="serviceGroup.color" swatches="text-advanced" :swatch-style="{width: '32px', height: '32px'}"></swatches>
-
-
-                                            <b-form-input id="color" v-model="serviceGroup.color" trim/>
-                                        </div>
-
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="2" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-shortname"
+                                        label="Sigla"
+                                        label-for="shortname">
+                                        <b-form-input id="shortname" v-model="serviceGroup.shortname" trim/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="9" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-nome"
+                                        label="Nome"
+                                        label-for="name">
+                                        <b-form-input id="name" v-model="serviceGroup.name" trim/>
                                     </b-form-group>
                                 </b-col>
                             </b-row>
@@ -70,11 +71,23 @@
         data() {
             return {
                 serviceGroup: ServiceGroup.new(),
-                url: '/forms/ufs/',
+                url: '/forms/service-groups/',
                 overlay: false,
                 exibirDelete: true,
                 popoverDelete: false,
                 carregandoCidades: false
+            }
+        },
+        computed: {
+            shortNameState() {
+                return this.serviceGroup.shortname
+                    ? this.serviceGroup.shortname.length > 0
+                    : false
+            },
+            nameState() {
+                return this.serviceGroup.name
+                    ? this.serviceGroup.name.length > 0
+                    : false
             }
         },
         created() {
@@ -88,6 +101,7 @@
         methods: {
             async load(id) {
                 this.serviceGroup = id ? await ServiceGroup.find(id) : ServiceGroup.new();
+                this.serviceGroup.color = this.serviceGroup.color ?? "#3d85c6"
             },
             updateId(uf = {}) {
                 this.serviceGroup.uf_id = uf.id;
@@ -132,6 +146,20 @@
             updateHistory(id = '') {
                 console.log(id)
                 history.pushState({}, null, this.url + id);
+            },
+            // Cria as bordas para os swatches caso a cor seja muito clara
+            getSwatchesBorder(color = null) {
+                if(!color)
+                    return 'none'
+
+                const red = parseInt(color[1], 16)
+                const blue = parseInt(color[3], 16)
+                const green = parseInt(color[5], 16)
+
+                if(red > 11 && blue > 11 && green > 11)
+                    return '1px solid #ccc'
+
+                return 'none'
             }
         }
     }
