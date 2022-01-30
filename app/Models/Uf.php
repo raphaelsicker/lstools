@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Base\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -13,6 +14,7 @@ use Illuminate\Support\Collection;
  * @property string uf
  *
  * @property Collection cities
+ * @mixin Builder
  */
 class Uf extends Model
 {

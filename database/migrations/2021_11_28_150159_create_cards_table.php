@@ -18,7 +18,6 @@ class CreateCardsTable extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->integer('order');
-            $table->foreignIdFor(ServiceGroup::class)->constrained();
             $table->foreignIdFor(Locality::class)->constrained();
             $table->timestamps();
         });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ServiceGroup;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,7 @@ class CreateLocalitiesTable extends Migration
         Schema::create('localities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignIdFor(ServiceGroup::class)->constrained();
             $table->timestamps();
         });
     }
