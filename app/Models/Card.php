@@ -9,10 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int id
  * @property int locality_id
- * @property int service_group_id
  * @property int order
  *
- *
+ * @property Locality locality
  * @mixin Builder
  */
 class Card extends Model
@@ -21,16 +20,10 @@ class Card extends Model
         'id',
         'order',
         'locality_id',
-        'service_group_id',
     ];
 
     public function locality(): BelongsTo
     {
         return $this->belongsTo(Locality::class);
-    }
-
-    public function serviceGroup(): BelongsTo
-    {
-        return $this->belongsTo(ServiceGroup::class);
     }
 }
