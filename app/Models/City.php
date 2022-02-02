@@ -28,6 +28,8 @@ class City extends Model
         'name' => 'asc'
     ];
 
+    protected $filterable = [Uf::class];
+
     protected $with = ['uf'];
 
     public function uf(): BelongsTo

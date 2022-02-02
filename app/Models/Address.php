@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string complement
  * @property string reference
  * @property string district
- * @property string latitude
- * @property string longitude
+ * @property string lat
+ * @property string lng
  * @property int city_id
  * @property int card_id
  *
@@ -31,10 +31,14 @@ class Address extends Model
         'complement',
         'reference',
         'district',
-        'latitude',
-        'longitude',
+        'lat',
+        'lng',
         'city_id',
         'card_id'
+    ];
+
+    public $orderBy = [
+        'street' => 'asc'
     ];
 
     protected $with = [

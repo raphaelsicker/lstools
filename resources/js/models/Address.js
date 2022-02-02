@@ -1,7 +1,7 @@
 import Api from "./Base/BaseModel";
 
 export default class ServiceGroup extends Api {
-    static apiUrl = '/api/cards'
+    static apiUrl = '/api/addresses'
 
     static new() {
         return {
@@ -11,11 +11,11 @@ export default class ServiceGroup extends Api {
             complement: null,
             reference: null,
             district: null,
-            latitude: null,
-            longitude: null,
+            lat: -22.5127163,
+            lng: -41.918432,
             city_id: null,
             card_id: null,
-            city: {},
+            city: {uf: {}},
             card: {}
         }
     }

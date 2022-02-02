@@ -22,10 +22,10 @@ class CreateAddressesTable extends Migration
             $table->string('complement')->nullable();
             $table->string('district')->nullable();
             $table->string('reference')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
-            $table->foreignIdFor(City::class)->constrained();
-            $table->foreignIdFor(Card::class)->constrained();
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
+            $table->foreignIdFor(City::class)->nullable();
+            $table->foreignIdFor(Card::class)->nullable();
             $table->timestamps();
         });
     }

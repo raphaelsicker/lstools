@@ -7,47 +7,92 @@
                         <b-card>
                             <card-title
                                 title="Cadastro"
-                                subTitle="Edite aqui os dados da Saída de Campo"/>
+                                subTitle="Edite aqui os dados do Endereço"/>
                             <b-row>
-                                <b-col md="1" class="form-field">
+                                <b-col md="7" class="form-field">
                                     <b-form-group
-                                        id="fieldset-color"
-                                        label="Cor"
-                                        label-for="color">
-
-                                        <swatches
-                                            v-model="serviceGroup.color"
-                                            swatches="text-advanced"
-                                            :trigger-style="{
-                                                width: '35px',
-                                                height: '35px',
-                                                borderRadius: '30px',
-                                                border: getSwatchesBorder(serviceGroup.color)
-                                            }"
-                                        ></swatches>
+                                        id="fieldset-street"
+                                        label="Endereço"
+                                        label-for="street">
+                                        <gmap-autocomplete
+                                            :value="address.street"
+                                            @place_changed="onChangeAddress"
+                                        />
 
                                     </b-form-group>
                                 </b-col>
                                 <b-col md="2" class="form-field">
                                     <b-form-group
-                                        id="fieldset-shortname"
-                                        label="Sigla"
-                                        label-for="shortname">
-                                        <b-form-input id="shortname" v-model="serviceGroup.shortname" trim/>
+                                        id="fieldset-number"
+                                        label="Número"
+                                        label-for="number">
+                                        <b-form-input id="name" v-model="address.number" trim/>
                                     </b-form-group>
                                 </b-col>
-                                <b-col md="9" class="form-field">
+                                <b-col md="3" class="form-field">
                                     <b-form-group
-                                        id="fieldset-nome"
-                                        label="Nome"
-                                        label-for="name">
-                                        <b-form-input id="name" v-model="serviceGroup.name" trim/>
+                                        id="fieldset-complement"
+                                        label="Complemento"
+                                        label-for="complement">
+                                        <b-form-input id="name" v-model="address.complement" trim/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="3" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-district"
+                                        label="Bairro/Distrito"
+                                        label-for="district">
+                                        <b-form-input id="name" v-model="address.district" trim/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="2" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-uf"
+                                        label="UF"
+                                        label-for="uf">
+                                        <uf-select v-model="uf" @input="address.city = {}"/>
+
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="4" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-city"
+                                        label="Cidade"
+                                        label-for="city">
+
+                                        <city-select v-model="address.city" :uf="uf" @input="onChangeCity"/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="12" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-reference"
+                                        label="Referência"
+                                        label-for="reference">
+                                        <b-form-textarea id="name" v-model="address.reference" trim/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="12" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-gmap"
+                                        label="Mapa"
+                                        label-for="gmap">
+                                        <gmap-map
+                                            :center="center"
+                                            :zoom="gmapZoom"
+                                            class="form-control"
+                                            style="width: 100%; height: 500px">
+                                            <gmap-marker
+                                                :position="address"
+                                                :clickable="true"
+                                                :draggable="true"
+                                                @drag="updateLatLng"/>
+                                        </gmap-map>
                                     </b-form-group>
                                 </b-col>
                             </b-row>
                             <template v-slot:footer>
                                 <b-button variant="info" @click="save">Salvar</b-button>
-                                <b-button variant="danger" v-if="serviceGroup.id" @click="confirmDelete">Excluir</b-button>
+                                <b-button variant="danger" v-if="address.id" @click="confirmDelete">Excluir</b-button>
                             </template>
                         </b-card>
 
@@ -62,32 +107,27 @@
     import ContentTitle from "../../components/ContentTitle";
     import CardTitle from "../../components/CardTitle";
     import Swal from "sweetalert2";
-    import ServiceGroup from "../../../models/ServiceGroup";
+    import Address from "../../../models/Address";
+    import CitySelect from "../City/select";
+    import City from "../../../models/City";
+    import UfSelect from "../Uf/select";
 
     export default {
-        name: "ServiceGroupEdit",
-        components: {CardTitle, ContentTitle},
+        name: "AddressEdit",
+        components: {UfSelect, CitySelect, CardTitle, ContentTitle},
         props: ['value'],
         data() {
             return {
-                serviceGroup: ServiceGroup.new(),
-                url: '/forms/service-groups/',
+                address: Address.new(),
+                url: '/maps/addresses/',
                 overlay: false,
-                exibirDelete: true,
                 popoverDelete: false,
-                carregandoCidades: false
-            }
-        },
-        computed: {
-            shortNameState() {
-                return this.serviceGroup.shortname
-                    ? this.serviceGroup.shortname.length > 0
-                    : false
-            },
-            nameState() {
-                return this.serviceGroup.name
-                    ? this.serviceGroup.name.length > 0
-                    : false
+                gmapZoom: 16,
+                center: {
+                    lat: -22.5127163,
+                    lng: -41.918432
+                },
+                uf: {}
             }
         },
         created() {
@@ -100,23 +140,32 @@
         },
         methods: {
             async load(id) {
-                this.serviceGroup = id ? await ServiceGroup.find(id) : ServiceGroup.new();
-                this.serviceGroup.color = this.serviceGroup.color ?? "#3d85c6"
+                this.address = id ? await Address.find(id) : Address.new();
+
+                this.uf = this.address.city.uf
+                this.center.lat = this.address.lat = (this.address.lat ?? -22.5127163) * 1
+                this.center.lng = this.address.lng = (this.address.lng ?? -41.918432) * 1
             },
             updateId(uf = {}) {
-                this.serviceGroup.uf_id = uf.id;
+                this.address.uf_id = uf.id;
             },
             async save() {
-                const response = await ServiceGroup.save(this.serviceGroup)
+                const response = await Address.save(this.address)
 
                 if(!response.id) {
                     return Swal.fire('Erro!', response.message ?? 'Aconteceu um erro ao salvar o registro!', 'error')
                 }
 
-                this.serviceGroup = response
                 Swal.fire('Sucesso!','Registro atualizado com sucesso!','success')
-                this.$router.push(this.url + this.serviceGroup.id)
-                this.$emit('reloadGrid')
+
+                this.address = response
+                this.address.lat *= 1
+                this.address.lng *= 1
+
+                if(!this.value) {
+                    await this.$router.push(this.url + this.address.id)
+                    this.$emit('reloadGrid')
+                }
             },
             confirmDelete() {
                 Swal.fire({
@@ -136,10 +185,10 @@
             },
             delete() {
                 this.popoverDelete = false;
-                ServiceGroup.delete(this.serviceGroup.id);
+                Address.delete(this.address.id);
 
                 Swal.fire('Sucesso!', 'Cidade removida com sucesso', 'success')
-                this.serviceGroup = ServiceGroup.new();
+                this.address = Address.new();
                 this.$router.push(this.url)
                 this.$emit('reloadGrid')
             },
@@ -147,20 +196,41 @@
                 console.log(id)
                 history.pushState({}, null, this.url + id);
             },
-            // Cria as bordas para os swatches caso a cor seja muito clara
-            getSwatchesBorder(color = null) {
-                if(!color)
-                    return 'none'
+            updateLatLng(position = {}) {
+                this.address.lat = position.latLng.lat()
+                this.address.lng = position.latLng.lng()
+            },
+            async onChangeAddress(place) {
+                if (!place) return
 
-                const red = parseInt(color[1], 16)
-                const blue = parseInt(color[3], 16)
-                const green = parseInt(color[5], 16)
+                this.center.lat = this.address.lat = place.geometry.location.lat()
+                this.center.lng = this.address.lng = place.geometry.location.lng()
 
-                if(red > 11 && blue > 11 && green > 11)
-                    return '1px solid #ccc'
+                this.address.street = this.getAddressField(place, 'route')
+                this.address.district = this.getAddressField(place, 'sublocality_level_1', 'short_name')
 
-                return 'none'
+                const city = this.getAddressField(place, 'administrative_area_level_2', 'short_name')
+                const uf = this.getAddressField(place, 'administrative_area_level_1', 'short_name')
+
+                const filters = JSON.stringify({
+                    name: city,
+                    uf: {uf:uf}
+                })
+
+                const cities = await City.get({filters})
+
+                this.uf = cities.data[0].uf
+                this.address.city = cities.data[0]
+                this.address.city_id = cities.data[0].id
+            },
+            onChangeCity() {
+                this.address.city_id = this.address.city.id ?? null
+            },
+            getAddressField(place, key, partial = 'long_name') {
+                const field = place.address_components.filter(v => v.types[0] === key)
+                return field[0] ? field[0][partial] : ''
             }
+
         }
     }
 </script>

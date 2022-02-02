@@ -49,8 +49,8 @@ export const routes = [
         }]
     },
     {
-        name: 'address',
-        path: '/maps/address',
+        name: 'addresses',
+        path: '/maps/addresses',
         component: Addresses,
         children: [{
             path: ':id',

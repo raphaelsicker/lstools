@@ -13,11 +13,19 @@ import Multiselect from "vue-multiselect";
 import store from './vuex';
 import VueMask from 'v-mask';
 import VSwatches from 'vue-swatches';
+import GmapVue from 'gmap-vue';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Router);
 Vue.use(VueMask);
+Vue.use(GmapVue, {
+    load: {
+        key: 'AIzaSyAlUit4tpB1aNGRzNEQtLXf_umBlkthRQQ',
+        libraries: 'places',
+        installComponents: true
+    }
+})
 
 Vue.component('multiselect', Multiselect)
 Vue.component('swatches', VSwatches)

@@ -1,6 +1,6 @@
 <template>
     <section id="main-content">
-        <main-content-title title="Saídas de Campo" subTitle="Lista os grupos de Saída de Campo"/>
+        <main-content-title title="Endereços" subTitle="Lista os Endereços do Território da Congregação"/>
         <div class="inner-content">
             <b-row>
                 <b-col lg="4" class="grid-content">
@@ -12,32 +12,23 @@
                             :opt="{
                                 search: search,
                                 filter: {title: 'Filtros'},
-                                new: {title: 'Nova Saída de Campo'},
+                                new: {title: 'Novo Endereço'},
                             }"
                         />
                         <card-callout
-                            v-for="item in serviceGroups.data"
+                            v-for="item in addresses.data"
                             v-bind:key="item.id"
                             class="callout-default"
                             :class="item.id === id ? 'active' : '' "
                             @click="updateId(item.id)">
-                            <b-row>
-                                <b-col md="2" class="float-left">
-                                    <div class="callout-color-circle" :style="{
-                                        'background-color': item.color,
-                                         border: getSwatchesBorder(item.color)
-                                    }"/>
-                                </b-col>
-                                <b-col md="10" >
-                                    <h6 >{{item.name}}</h6> {{item.shortname}}
-                                </b-col>
-                            </b-row>
+                            <h6 >{{ fullAddress(item) }}</h6>
+                            {{item.city.name}} - {{item.city.uf.uf}}
                         </card-callout>
 
                         <b-pagination
-                            v-model="serviceGroups.current_page"
-                            :total-rows="serviceGroups.total"
-                            :per-page="serviceGroups.per_page"
+                            v-model="addresses.current_page"
+                            :total-rows="addresses.total"
+                            :per-page="addresses.per_page"
                             @input="loadGrid"
                             align="center"
                         />
@@ -70,10 +61,10 @@
     import UfFilter from "./filter"
     import UfEdit from "./edit";
     import MainContentTitle from "../../components/MainContentTitle";
-    import ServiceGroup from "../../../models/ServiceGroup";
+    import Address from "../../../models/Address";
 
     export default {
-        name: "ServiceGroups",
+        name: "Address",
         components: {
             UfEdit,
             UfFilter,
@@ -86,8 +77,8 @@
             return {
                 id: this.$route.params.id || null,
                 search: {text: ''},
-                serviceGroups: [],
-                ServiceGroup: {},
+                addresses: [],
+                Address: {},
                 error: [],
                 overlay: {
                     grid: true,
@@ -95,8 +86,8 @@
                 },
                 filter: {show: false},
                 filters: {},
-                url: '/forms/service-groups/',
-                orderBy: {'name': 'asc'}
+                url: '/maps/addresses/',
+                orderBy: {'street': 'asc'}
             }
         },
         mounted() {
@@ -118,10 +109,10 @@
                 this.id = this.$route.params.id || null
                 this.overlay.grid = true;
 
-                this.serviceGroups = await ServiceGroup.get({
+                this.addresses = await Address.get({
                     filters: this.filters,
                     search: this.search,
-                    page: this.serviceGroups.current_page,
+                    page: this.addresses.current_page,
                     per_page: this.perPage,
                     orderBy: JSON.stringify(this.orderBy),
                     ...params,
@@ -140,33 +131,25 @@
             paginate() {
                 this.loadGrid({
                     search: this.search.text,
-                    page: this.ServiceGroup.current_page
+                    page: this.Address.current_page
                 });
             },
             runSearch() {
                 this.loadGrid({
                     filters: JSON.stringify(this.filters),
                     search: this.search.text,
-                    page: this.ServiceGroup.current_page
+                    page: this.Address.current_page
                 });
             },
             openFilterModal() {
                 this.filter.show = true
                 this.search.text = ''
             },
-            // Cria as bordas para os swatches caso a cor seja muito clara
-            getSwatchesBorder(color = null) {
-                if(!color)
-                    return 'none'
-
-                const red = parseInt(color[1], 16)
-                const blue = parseInt(color[3], 16)
-                const green = parseInt(color[5], 16)
-
-                if(red > 11 && blue > 11 && green > 11)
-                    return '1px solid #ccc'
-
-                return 'none'
+            fullAddress(address = {}) {
+                return address.street
+                    + (address.number ? ', ' + address.number : '')
+                    + (address.complement ? ' - ' + address.complement : '')
+                    + (address.district ? ' - ' + address.district : '')
             }
         }
     }

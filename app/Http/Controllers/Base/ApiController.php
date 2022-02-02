@@ -22,10 +22,10 @@ class ApiController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->model::query();
+        $query = $this->model;
 
         if($filters = $request->filters ?: false) {
-            $query->where(json_decode($filters, true));
+            $query = $this->model->makeFilter($query, $filters);
         }
 
         if($search = $request->search ?: false) {
