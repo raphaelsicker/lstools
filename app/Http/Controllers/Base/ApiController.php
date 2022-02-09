@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Base;
 
 use App\Models\Base\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

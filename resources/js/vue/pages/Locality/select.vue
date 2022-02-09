@@ -2,32 +2,32 @@
     <multiselect
         v-bind:value="value"
         @input="$emit('input', $event)"
-        :options="cards"
+        :options="localities"
         :searchable="true"
         :close-on-select="true"
         :show-labels="false"
-        id="cards"
-        label="order"
-        track-by="order"
-        placeholder="">
+        id="localidades"
+        label="name"
+        track-by="name"
+        placeholder="Localidades">
         <span slot="noOptions">Nenhuma opção ainda</span>
         <span slot="noResult">Nenhum estado encontrada</span>
     </multiselect>
 </template>
 
 <script>
-    import Card from "../../../models/Card";
+    import Locality from "../../../models/Locality";
 
     export default {
-        name: "CardSelect",
-        props: ['value', 'locality'],
+        name: "LocalitySelect",
+        props: ['value', 'service-group'],
         data() {
             return {
-                cards: []
+                localities: []
             }
         },
         watch: {
-            locality: function() {
+            serviceGroup: function() {
                 this.load()
             }
         },
@@ -36,11 +36,11 @@
         },
         methods: {
             async load() {
-                const filters = this.locality
-                    ? JSON.stringify({locality_id: this.locality.id})
+                const filters = this.serviceGroup
+                    ? JSON.stringify({service_group_id: this.serviceGroup.id})
                     : {}
 
-                this.cards = await Card.all({filters})
+                this.localities = await Locality.all({filters})
             }
         }
     }

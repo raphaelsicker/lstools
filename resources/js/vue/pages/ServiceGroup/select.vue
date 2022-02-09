@@ -2,15 +2,14 @@
     <multiselect
         v-bind:value="value"
         @input="$emit('input', $event)"
-        :options="serviceGroup"
+        :options="serviceGroups"
         :searchable="true"
         :close-on-select="true"
         :show-labels="false"
         id="serviceGroups"
         label="name"
         track-by="name"
-        placeholder="Saídas de Campo"
-    >
+        placeholder="Saídas de Campo">
         <span slot="noOptions">Nenhuma opção ainda</span>
         <span slot="noResult">Nenhum estado encontrada</span>
     </multiselect>
@@ -24,7 +23,7 @@
         props: ['value'],
         data() {
             return {
-                serviceGroup: []
+                serviceGroups: []
             }
         },
         mounted() {
@@ -32,7 +31,7 @@
         },
         methods: {
             async load() {
-                this.serviceGroup = await ServiceGroup.all();
+                this.serviceGroups = await ServiceGroup.all();
             }
         }
     }

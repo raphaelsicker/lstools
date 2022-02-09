@@ -9,8 +9,7 @@
         id="cities"
         label="name"
         track-by="name"
-        placeholder="Estados"
-    >
+        placeholder="">
         <span slot="noOptions">Nenhuma opção ainda</span>
         <span slot="noResult">Nenhum estado encontrada</span>
     </multiselect>
@@ -37,13 +36,9 @@
         },
         methods: {
             async load() {
-                if(!this.uf.id) {
-                    return this.cities = await City.all()
-                }
-
-                const filters = JSON.stringify({
-                    uf_id: this.uf.id
-                })
+                const filters = this.uf
+                    ? JSON.stringify({uf_id: this.uf.id})
+                    : {}
 
                 this.cities = await City.all({filters})
             }

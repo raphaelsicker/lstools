@@ -24,14 +24,9 @@ class Locality extends Model
         'service_group_id'
     ];
 
-    public $orderBy = [
-        'name' => 'asc'
-    ];
-
-    protected $with = [
-        'serviceGroup',
-        'cards'
-    ];
+    public $orderBy = ['name' => 'asc'];
+    public $appends = ['cards_length'];
+    protected $with = ['serviceGroup'];
 
     public function serviceGroup(): BelongsTo
     {
@@ -41,5 +36,10 @@ class Locality extends Model
     public function cards(): HasMany
     {
         return $this->hasMany(Card::class);
+    }
+
+    public function getCardsLengthAttribute(): int
+    {
+        return $this->attributes['cards_lenght'] = $this->cards()->count();
     }
 }

@@ -1,5 +1,4 @@
-FROM php:8.0.0-fpm-alpine3.12
-
+FROM php:8.1.2-fpm-alpine3.15
 ARG COMPOSER_AUTH
 ENV COMPOSER_AUTH $COMPOSER_AUTH
 ARG APP_STAGE
@@ -27,6 +26,8 @@ RUN apk --update add --no-cache \
     freetype-dev \
     && rm -rf /var/cache/apk/*
 
+RUN php -i | grep -i token
+
 RUN docker-php-ext-install \
     pdo_mysql \
     mbstring \
@@ -34,10 +35,10 @@ RUN docker-php-ext-install \
     soap \
     xml \
     posix \
-    tokenizer \
     ctype \
     pcntl \
-    opcache
+    opcache \
+    zip
 
 RUN pecl install -f apcu \
     && echo 'extension=apcu.so' > /usr/local/etc/php/conf.d/30_apcu.ini
@@ -59,8 +60,6 @@ RUN pecl install timezonedb \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer --version
-
-RUN docker-php-ext-install zip xml posix ctype pcntl
 
 RUN set -eux \
     & apk add --no-cache \

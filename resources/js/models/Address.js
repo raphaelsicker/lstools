@@ -1,4 +1,6 @@
 import Api from "./Base/BaseModel";
+import Uf from "./Uf";
+import Card from "./Card";
 
 export default class ServiceGroup extends Api {
     static apiUrl = '/api/addresses'
@@ -15,8 +17,10 @@ export default class ServiceGroup extends Api {
             lng: -41.918432,
             city_id: null,
             card_id: null,
-            city: {uf: {}},
-            card: {}
+            card: Card.new(),
+            city: {
+                uf: Uf.new()
+            },
         }
     }
 }

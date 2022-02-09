@@ -22,7 +22,7 @@
                             :class="item.id === id ? 'active' : '' "
                             @click="updateId(item.id)">
                                 <h6 >{{item.name}}</h6>
-                                Cartões: {{item.cards.length}}
+                                Cartões: {{item.cards_length}}
                         </card-callout>
 
                         <b-pagination

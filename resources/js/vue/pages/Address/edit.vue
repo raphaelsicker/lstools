@@ -17,8 +17,8 @@
                                         <gmap-autocomplete
                                             :value="address.street"
                                             @place_changed="onChangeAddress"
+                                            placeholder=""
                                         />
-
                                     </b-form-group>
                                 </b-col>
                                 <b-col md="2" class="form-field">
@@ -37,7 +37,7 @@
                                         <b-form-input id="name" v-model="address.complement" trim/>
                                     </b-form-group>
                                 </b-col>
-                                <b-col md="3" class="form-field">
+                                <b-col md="5" class="form-field">
                                     <b-form-group
                                         id="fieldset-district"
                                         label="Bairro/Distrito"
@@ -51,16 +51,17 @@
                                         label="UF"
                                         label-for="uf">
                                         <uf-select v-model="uf" @input="address.city = {}"/>
-
                                     </b-form-group>
                                 </b-col>
-                                <b-col md="4" class="form-field">
+                                <b-col md="5" class="form-field">
                                     <b-form-group
                                         id="fieldset-city"
                                         label="Cidade"
                                         label-for="city">
-
-                                        <city-select v-model="address.city" :uf="uf" @input="onChangeCity"/>
+                                        <city-select
+                                            v-model="address.city"
+                                            :uf="uf"
+                                            @input="onChangeCity"/>
                                     </b-form-group>
                                 </b-col>
                                 <b-col md="12" class="form-field">
@@ -69,6 +70,36 @@
                                         label="Referência"
                                         label-for="reference">
                                         <b-form-textarea id="name" v-model="address.reference" trim/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="4" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-service-group"
+                                        label="Saída de Campo"
+                                        label-for="service-group">
+                                        <service-group-select v-model="serviceGroup" @input="onChangeServiceGroup"/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="4" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-locality"
+                                        label="Localidade"
+                                        label-for="locality">
+                                        <locality-select
+                                            v-model="locality"
+                                            :service-group="serviceGroup"
+                                            @input="onChangeLocality"/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="4" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-card"
+                                        label="Cartão"
+                                        label-for="card">
+                                        <card-select
+                                            v-model="address.card"
+                                            :locality="locality"
+                                            @input="address.card_id = address.card.id"/>
                                     </b-form-group>
                                 </b-col>
                                 <b-col md="12" class="form-field">
@@ -80,7 +111,7 @@
                                             :center="center"
                                             :zoom="gmapZoom"
                                             class="form-control"
-                                            style="width: 100%; height: 500px">
+                                            style="width: 100%; height: 400px">
                                             <gmap-marker
                                                 :position="address"
                                                 :clickable="true"
@@ -111,14 +142,32 @@
     import CitySelect from "../City/select";
     import City from "../../../models/City";
     import UfSelect from "../Uf/select";
+    import ServiceGroupSelect from "../ServiceGroup/select";
+    import LocalitySelect from "../Locality/select";
+    import CardSelect from "../Card/select";
+    import Uf from "../../../models/Uf";
+    import ServiceGroup from "../../../models/ServiceGroup";
+    import Locality from "../../../models/Locality";
+    import Card from "../../../models/Card";
 
     export default {
         name: "AddressEdit",
-        components: {UfSelect, CitySelect, CardTitle, ContentTitle},
+        components: {
+            CardSelect,
+            LocalitySelect,
+            ServiceGroupSelect,
+            UfSelect,
+            CitySelect,
+            CardTitle,
+            ContentTitle
+        },
         props: ['value'],
         data() {
             return {
                 address: Address.new(),
+                uf: Uf.new(),
+                serviceGroup: ServiceGroup.new(),
+                locality: Locality.new(),
                 url: '/maps/addresses/',
                 overlay: false,
                 popoverDelete: false,
@@ -126,8 +175,7 @@
                 center: {
                     lat: -22.5127163,
                     lng: -41.918432
-                },
-                uf: {}
+                }
             }
         },
         created() {
@@ -142,9 +190,23 @@
             async load(id) {
                 this.address = id ? await Address.find(id) : Address.new();
 
-                this.uf = this.address.city.uf
                 this.center.lat = this.address.lat = (this.address.lat ?? -22.5127163) * 1
                 this.center.lng = this.address.lng = (this.address.lng ?? -41.918432) * 1
+
+                if(this.address.city.uf)
+                    this.uf = this.address.city.uf
+
+                this.fillCardChilds()
+            },
+            fillCardChilds() {
+                if(!this.address.card) {
+                    this.locality = Locality.new()
+                    this.serviceGroup = Locality.new()
+                    return
+                }
+
+                this.locality = this.address.card.locality
+                this.serviceGroup = this.address.card.locality.service_group
             },
             updateId(uf = {}) {
                 this.address.uf_id = uf.id;
@@ -200,6 +262,10 @@
                 this.address.lat = position.latLng.lat()
                 this.address.lng = position.latLng.lng()
             },
+            getAddressField(place, key, partial = 'long_name') {
+                const field = place.address_components.filter(v => v.types[0] === key)
+                return field[0] ? field[0][partial] : ''
+            },
             async onChangeAddress(place) {
                 if (!place) return
 
@@ -226,10 +292,14 @@
             onChangeCity() {
                 this.address.city_id = this.address.city.id ?? null
             },
-            getAddressField(place, key, partial = 'long_name') {
-                const field = place.address_components.filter(v => v.types[0] === key)
-                return field[0] ? field[0][partial] : ''
-            }
+            onChangeLocality() {
+                this.address.card = Card.new()
+            },
+            onChangeServiceGroup() {
+                this.locality = Locality.new()
+                this.address.card = Card.new()
+            },
+
 
         }
     }
