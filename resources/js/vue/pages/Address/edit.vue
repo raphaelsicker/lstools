@@ -107,12 +107,25 @@
                                         id="fieldset-gmap"
                                         label="Mapa"
                                         label-for="gmap">
+
+                                        <b-form-checkbox
+                                            id="checkbox-1"
+                                            v-model="onDragMarker"
+                                            name="checkbox-1"
+                                            value="update"
+                                            unchecked-value="not_update">
+                                            <div style="font-weight: normal">
+                                                Atualizar endereço ao mover o ponteiro do mapa
+                                            </div>
+                                        </b-form-checkbox>
                                         <gmap-map
+                                            ref="gMap"
                                             :center="center"
                                             :zoom="gmapZoom"
                                             class="form-control"
                                             style="width: 100%; height: 400px">
                                             <gmap-marker
+                                                ref="myMarker"
                                                 :position="address"
                                                 :clickable="true"
                                                 :draggable="true"
@@ -171,6 +184,7 @@
                 url: '/maps/addresses/',
                 overlay: false,
                 popoverDelete: false,
+                onDragMarker: 'update',
                 gmapZoom: 16,
                 center: {
                     lat: -22.5127163,
@@ -261,9 +275,21 @@
             updateLatLng(position = {}) {
                 this.address.lat = position.latLng.lat()
                 this.address.lng = position.latLng.lng()
+
+                if(this.onDragMarker !== 'update') return
+
+                const latlng = new google.maps.LatLng(this.address.lat, this.address.lng)
+                const geocoder = new google.maps.Geocoder()
+
+                geocoder
+                    .geocode({location: latlng})
+                    .then(response => {
+                        if(!response.results[0]) return
+                        this.fillAddressFields(response.results[0].address_components)
+                    }).catch(error => error)
             },
             getAddressField(place, key, partial = 'long_name') {
-                const field = place.address_components.filter(v => v.types[0] === key)
+                const field = place.filter(v => v.types.includes(key))
                 return field[0] ? field[0][partial] : ''
             },
             async onChangeAddress(place) {
@@ -272,8 +298,12 @@
                 this.center.lat = this.address.lat = place.geometry.location.lat()
                 this.center.lng = this.address.lng = place.geometry.location.lng()
 
+                this.fillAddressFields(place.address_components)
+            },
+            async fillAddressFields(place) {
                 this.address.street = this.getAddressField(place, 'route')
-                this.address.district = this.getAddressField(place, 'sublocality_level_1', 'short_name')
+                this.address.district = this.getAddressField(place, 'sublocality_level_1')
+                    || this.getAddressField(place, 'sublocality')
 
                 const city = this.getAddressField(place, 'administrative_area_level_2', 'short_name')
                 const uf = this.getAddressField(place, 'administrative_area_level_1', 'short_name')
@@ -298,9 +328,7 @@
             onChangeServiceGroup() {
                 this.locality = Locality.new()
                 this.address.card = Card.new()
-            },
-
-
+            }
         }
     }
 </script>

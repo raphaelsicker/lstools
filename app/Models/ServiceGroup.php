@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Base\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int id
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string shortname
  * @property string color
  *
+ * @property Collection localities
  * @mixin Builder
  */
 class ServiceGroup extends Model
@@ -25,4 +28,9 @@ class ServiceGroup extends Model
     public $orderBy = [
         'name' => 'asc'
     ];
+
+    public function localities(): HasMany
+    {
+        return $this->hasMany(Locality::class);
+    }
 }

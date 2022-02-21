@@ -26,6 +26,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('menus', [MenuController::class, 'index']);
+Route::get('service-groups/{id}/localities', [ServiceGroupController::class, 'localities']);
 
 //Resources
 Route::resource('addresses', AddressController::class);
@@ -34,5 +35,6 @@ Route::resource('cities', CityController::class);
 Route::resource('localities', LocalityController::class);
 Route::resource('service-groups', ServiceGroupController::class);
 Route::resource('ufs', UfController::class);
+
 
 

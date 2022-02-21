@@ -1,16 +1,18 @@
 <template>
     <div class="grid-filter">
-        <b-input-group>
-            <b-form-input type="text" v-model="opt.search.text"/>
-            <b-input-group-append>
-                <b-button
-                    v-b-popover.hover.top="opt.search.title"
-                    @click="searchClick">
-                    <i class="fas fa-search"></i>
-                </b-button>
-            </b-input-group-append>
-        </b-input-group>
-        <div class="filters-append">
+        <slot>
+            <b-input-group>
+                <b-form-input type="text" v-model="opt.search.text"/>
+                <b-input-group-append>
+                    <b-button
+                        v-b-popover.hover.top="opt.search.title"
+                        @click="searchClick">
+                        <i class="fas fa-search"></i>
+                    </b-button>
+                </b-input-group-append>
+            </b-input-group>
+        </slot>
+        <div class="filters-append" v-if="opt.filter.show !== false">
             <b-button
                 v-b-popover.hover.top="opt.filter.title"
                 @click="filterClick">
@@ -34,7 +36,7 @@
                 type: Object,
                 default: function () {
                     return {
-                        filter: {title: "Filtros"},
+                        filter: {title: "Filtros", show: true},
                         new: {title: "Novo"},
                         search: {
                             val: '',

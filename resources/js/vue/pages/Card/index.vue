@@ -3,7 +3,7 @@
         <main-content-title title="Cartões" subTitle="Lista os Cartões de Mapas da Congregação"/>
         <div class="inner-content">
             <b-row>
-                <b-col lg="4" class="grid-content">
+                <b-col lg="2" class="grid-content">
                     <b-overlay :show="overlay.grid" class="grid-box">
                         <grid-filter
                             @filterClick="openFilterModal"
@@ -11,24 +11,31 @@
                             @searchClick="runSearch"
                             :opt="{
                                 search: search,
-                                filter: {title: 'Filtros'},
+                                filter: {show: false},
                                 new: {title: 'Novo Cartão'},
-                            }"
-                        />
+                            }">
+                            <service-group-select
+                                v-model="service_group_filter"
+                                @input="runFilter"
+                            />
+                        </grid-filter>
                         <card-callout
-                            v-for="item in locality.data"
+                            v-for="item in localities.data"
                             v-bind:key="item.id"
                             class="callout-default"
                             :class="item.id === id ? 'active' : '' "
                             @click="updateId(item.id)">
-                                <h6 >{{item.name}}</h6>
-                                Cartões: {{item.cards_length}}
+                            <div>
+                                <strong>{{item.name}}</strong>
+                                ({{item.service_group.shortname}})
+                            </div>
+                            <div>Cartões: {{item.cards_length}}</div>
                         </card-callout>
 
                         <b-pagination
-                            v-model="locality.current_page"
-                            :total-rows="locality.total"
-                            :per-page="locality.per_page"
+                            v-model="localities.current_page"
+                            :total-rows="localities.total"
+                            :per-page="localities.per_page"
                             @input="loadGrid"
                             align="center"
                         />
@@ -36,18 +43,12 @@
                       {{ error.message }}
                     </b-overlay>
                 </b-col>
-                <b-col lg="8">
+                <b-col lg="10">
                     <b-overlay :show="overlay.form" class="grid-box">
-                        <uf-edit v-model="id" v-on:reloadGrid="runSearch"/>
+                        <edit v-model="id" v-on:reloadGrid="runSearch"/>
                     </b-overlay>
                 </b-col>
             </b-row>
-            <uf-filter
-                v-model="filters"
-                :show="filter.show"
-                @reloadGrid="runFilter"
-                @clear="clearFilter"
-                @hide="filter.show = false" />
         </div>
     </section>
 
@@ -58,16 +59,16 @@
     import CardCallout from "../../components/CardCallout";
     import GridFilter from "../../components/GridFilter";
 
-    import UfFilter from "./filter"
-    import UfEdit from "./edit";
+    import Edit from "./edit";
     import MainContentTitle from "../../components/MainContentTitle";
     import Locality from "../../../models/Locality";
+    import ServiceGroupSelect from "../ServiceGroup/select";
 
     export default {
         name: "Cards",
         components: {
-            UfEdit,
-            UfFilter,
+            ServiceGroupSelect,
+            Edit,
             MainContentTitle,
             GridFilter,
             CardCallout,
@@ -77,7 +78,7 @@
             return {
                 id: this.$route.params.id || null,
                 search: {text: ''},
-                locality: [],
+                localities: [],
                 ServiceGroup: {},
                 error: [],
                 overlay: {
@@ -85,9 +86,9 @@
                     form: true
                 },
                 filter: {show: false},
-                filters: {},
                 url: '/maps/cards/',
-                orderBy: {'name': 'asc'}
+                orderBy: {'name': 'asc'},
+                service_group_filter: {}
             }
         },
         mounted() {
@@ -109,10 +110,10 @@
                 this.id = this.$route.params.id || null
                 this.overlay.grid = true;
 
-                this.locality = await Locality.get({
+                this.localities = await Locality.get({
                     filters: this.filters,
                     search: this.search,
-                    page: this.locality.current_page,
+                    page: this.localities.current_page,
                     per_page: this.perPage,
                     orderBy: JSON.stringify(this.orderBy),
                     ...params,
@@ -126,39 +127,29 @@
                 this.runFilter()
             },
             runFilter() {
-                this.loadGrid({filters: JSON.stringify(this.filters)});
+                let filters = this.service_group_filter
+                    ? {service_group_id: this.service_group_filter.id}
+                    : {}
+
+                this.loadGrid({filters: JSON.stringify(filters)});
             },
             paginate() {
                 this.loadGrid({
                     search: this.search.text,
-                    page: this.locality.current_page
+                    page: this.localities.current_page
                 });
             },
             runSearch() {
                 this.loadGrid({
                     filters: JSON.stringify(this.filters),
                     search: this.search.text,
-                    page: this.locality.current_page
+                    page: this.localities.current_page
                 });
             },
             openFilterModal() {
                 this.filter.show = true
                 this.search.text = ''
             },
-            // Cria as bordas para os swatches caso a cor seja muito clara
-            getSwatchesBorder(color = null) {
-                if(!color)
-                    return 'none'
-
-                const red = parseInt(color[1], 16)
-                const blue = parseInt(color[3], 16)
-                const green = parseInt(color[5], 16)
-
-                if(red > 11 && blue > 11 && green > 11)
-                    return '1px solid #ccc'
-
-                return 'none'
-            }
         }
     }
 </script>
