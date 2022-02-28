@@ -29,14 +29,36 @@
                                     </b-form-group>
                                 </b-col>
                             </b-row>
-
+                            <b-row >
+                                <b-col md="12" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-gmap"
+                                        label="Mapa"
+                                        label-for="gmap">
+                                        <gmap-map
+                                            ref="gMap"
+                                            :center="center"
+                                            :zoom="gmapZoom"
+                                            class="form-control"
+                                            style="width: 100%; height: 400px">
+                                            <gmap-marker
+                                                v-for="(m, key) in markers"
+                                                :key="key"
+                                                :position="m.position"
+                                                :label="m.label"
+                                                :icon="m.icon"
+                                                :clickable="true"/>
+                                        </gmap-map>
+                                    </b-form-group>
+                                </b-col>
+                            </b-row>
                             <b-row >
                                 <b-col v-for="(card, i) in cards" :key="i" md="4" class="form-field">
                                     <b-card class="mb-4">
                                         <template v-slot:header>
                                             Cartão: {{getCardOrder(i, card)}}
                                         </template>
-                                        <draggable class="list-group" :list="card.addresses" group="cards">
+                                        <draggable class="list-group" :list="card.addresses" group="cards" @change="setMarkers">
                                             <b-list-group-item v-for="address in card.addresses" :key="address.id">
                                                 {{ address.complete }}
                                             </b-list-group-item>
@@ -48,6 +70,8 @@
                             <b-row class="m-1">
                                 <b-button variant="info" @click="newCard">Novo Cartão</b-button>
                             </b-row>
+
+
 
                             <template v-slot:footer>
                                 <b-button variant="info" @click="save">Salvar</b-button>
@@ -69,10 +93,12 @@
     import Locality from "../../../models/Locality";
     import Card from "../../../models/Card";
     import ServiceGroupSelect from "../ServiceGroup/select";
-    import Draggable from 'vuedraggable'
+    import Draggable from 'vuedraggable';
+    import MarkerIcon from "../../../objects/MarkerIcon";
+    import MarkerLabel from "../../../objects/MarkerLabel";
 
     export default {
-        name: "ServiceGroupEdit",
+        name: "CardEdit",
         components: {ServiceGroupSelect, CardTitle, ContentTitle, Draggable},
         props: ['value'],
         data() {
@@ -81,7 +107,13 @@
                 cards:[],
                 url: '/maps/cards/',
                 overlay: false,
-                popoverDelete: false
+                popoverDelete: false,
+                gmapZoom: 16,
+                center: {
+                    lat: -22.5127163,
+                    lng: -41.918432
+                },
+                markers: []
             }
         },
         created() {
@@ -95,7 +127,31 @@
         methods: {
             async load(id) {
                 this.locality = id ? await Locality.find(id) : Locality.new()
+                await this.loadCards()
+            },
+            async loadCards() {
                 this.cards = this.locality.id ? await Locality.cards(this.locality.id) : []
+                this.setMarkers()
+            },
+            setMarkers() {
+                this.markers = [];
+                this.cards.map(card => {
+                    for(const address of card.addresses) {
+                        this.markers.push({
+                            label: MarkerLabel.new(card.order + ""),
+                            position: {
+                                lat: address.lat * 1,
+                                lng: address.lng * 1
+                            },
+                            icon: MarkerIcon.new()
+                        })
+                    }
+                })
+
+                this.center = {
+                    lat: this.markers.reduce((total, m) => total + m.position.lat, 0) / this.markers.length,
+                    lng: this.markers.reduce((total, m) => total + m.position.lng, 0) / this.markers.length
+                }
             },
             async save() {
                 this.locality.cards = this.cards
@@ -106,7 +162,7 @@
                 }
 
                 this.locality = response
-                this.cards = this.locality.id ? await Locality.cards(this.locality.id) : []
+                this.loadCards()
 
                 await Swal.fire('Sucesso!','Cartão salvo com sucesso!','success')
                 this.$emit('reloadGrid')
@@ -149,11 +205,17 @@
             newCard() {
                 Card.new();
                 this.cards.push(Card.new())
+            },
+            log(teste) {
+                alert('teste')
+                console.log(teste);
             }
         }
     }
 </script>
 
 <style scoped>
-
+.marker-label {
+    color: #fff;
+}
 </style>
