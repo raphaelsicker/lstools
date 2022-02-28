@@ -27,6 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('menus', [MenuController::class, 'index']);
 Route::get('service-groups/{id}/localities', [ServiceGroupController::class, 'localities']);
+Route::get('localities/{id}/cards', [LocalityController::class, 'cards']);
 
 //Resources
 Route::resource('addresses', AddressController::class);

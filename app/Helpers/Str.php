@@ -26,7 +26,7 @@ class Str extends \Illuminate\Support\Str
     }
 
     /**
-     * Adiciona um prefixo à uma string
+     * Adiciona um prefixo à uma string se ela estiver preenchida
      *
      * @param string|null $string
      * @param string $prefix
@@ -43,7 +43,7 @@ class Str extends \Illuminate\Support\Str
     }
 
     /**
-     * Adiciona um sufixo à uma string
+     * Adiciona um sufixo à uma string se ela estiver preenchida
      *
      * @param string|null $string
      * @param string $suffix

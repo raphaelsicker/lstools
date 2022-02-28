@@ -6,6 +6,7 @@ use App\Models\Base\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int id
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int service_group_id
  *
  * @property ServiceGroup serviceGroup
+ * @property Collection cards
  *
  * @mixin Builder
  */
@@ -33,9 +35,13 @@ class Locality extends Model
         return $this->belongsTo(ServiceGroup::class);
     }
 
-    public function cards(): HasMany
+    public function cards($withRelations = true): HasMany
     {
-        return $this->hasMany(Card::class);
+        $cards = $this->hasMany(Card::class);
+
+        return $withRelations
+            ? $cards
+            : $cards->without(['locality']);
     }
 
     public function getCardsLengthAttribute(): int

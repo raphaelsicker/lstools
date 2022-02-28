@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Base\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int id
@@ -12,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int order
  *
  * @property Locality locality
+ * @property Collection adressess
  * @mixin Builder
  */
 class Card extends Model
@@ -27,5 +30,10 @@ class Card extends Model
     public function locality(): BelongsTo
     {
         return $this->belongsTo(Locality::class);
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
     }
 }

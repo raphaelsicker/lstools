@@ -21,15 +21,9 @@ class CardSeeder extends Seeder
             'service_group_id' => ServiceGroup::first()?->id
         ]);
 
-        Card::createMany([
-            [
-                'order' => 1,
-                'locality_id' => $locality->id
-            ],
-            [
-                'order' => 2,
-                'locality_id' => $locality->id
-            ],
+        Card::create([
+            'order' => 1,
+            'locality_id' => $locality->id
         ]);
     }
 }

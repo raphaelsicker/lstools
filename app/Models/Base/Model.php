@@ -2,6 +2,7 @@
 
 namespace App\Models\Base;
 
+use App\Helpers\Arr;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -63,12 +64,9 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
         );
 
         foreach($filters as $key => $val) {
-            //dd($query, $relationTable, $key, $val);
             $query = $this->addWhere($query, $relationTable, $key, $val);
         }
         return $query;
-
-        //return $query->where($table . '.' . $key, $val);
     }
 
     public static function createMany(array $items): array
@@ -78,5 +76,18 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
         }
 
         return $created ?? [];
+    }
+
+    public static function store(array $data): Model
+    {
+        $key = (new static())->getKeyName();
+
+        if(!$model = self::find($data[$key] ?? null)) {
+            return self::create($data);
+        }
+
+        $model->fill($data)->save();
+        $model->fresh();
+        return $model;
     }
 }

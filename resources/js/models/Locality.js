@@ -1,6 +1,8 @@
 import Api from "./Base/BaseModel";
+import querystring from "querystring";
+import axios from "axios";
 
-export default class ServiceGroup extends Api {
+export default class Locality extends Api {
     static apiUrl = '/api/localities'
 
     static new() {
@@ -9,7 +11,14 @@ export default class ServiceGroup extends Api {
             name: null,
             service_group_id: null,
             service_group: {},
-            cards: {}
+            cards: []
         }
+    }
+
+    static async cards(id, params = {}) {
+        this.url = this.apiUrl + '/' + id + '/cards?' + querystring.stringify(params)
+
+        return await axios.get(this.url)
+            .then(response => response.data)
     }
 }

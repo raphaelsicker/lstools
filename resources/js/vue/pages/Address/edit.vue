@@ -113,7 +113,9 @@
                                             v-model="onDragMarker"
                                             name="checkbox-1"
                                             value="update"
-                                            unchecked-value="not_update">
+                                            unchecked-value="not_update"
+                                            class="danger"
+                                            switch>
                                             <div style="font-weight: normal">
                                                 Atualizar endereço ao mover o ponteiro do mapa
                                             </div>

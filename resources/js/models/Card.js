@@ -1,7 +1,7 @@
 import Api from "./Base/BaseModel";
 import Locality from "./Locality";
 
-export default class ServiceGroup extends Api {
+export default class Card extends Api {
     static apiUrl = '/api/cards'
 
     static new() {
@@ -9,7 +9,8 @@ export default class ServiceGroup extends Api {
             id: null,
             order: null,
             locality_id: null,
-            locality: Locality.new()
+            locality: Locality.new(),
+            addresses: []
         }
     }
 }

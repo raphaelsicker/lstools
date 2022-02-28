@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Str;
 use App\Models\Base\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,16 @@ class Address extends Model
         'city',
         'card'
     ];
+
+    public $appends = ['complete'];
+
+    public function getCompleteAttribute(): string
+    {
+        return $this->attributes['complete'] = $this->street
+            . Str::addPrefix($this->number, ', ')
+            . Str::addPrefix($this->complement, ' - ')
+            . Str::addPrefix($this->district, ' - ');
+    }
 
     public function city(): BelongsTo
     {

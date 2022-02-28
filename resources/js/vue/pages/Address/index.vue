@@ -21,7 +21,7 @@
                             class="callout-default"
                             :class="item.id === id ? 'active' : '' "
                             @click="updateId(item.id)">
-                            <h6 >{{ fullAddress(item) }}</h6>
+                            <h6 >{{ item.complete }}</h6>
                             {{item.city.name}} - {{item.city.uf.uf}}
                         </card-callout>
 
@@ -144,12 +144,6 @@
             openFilterModal() {
                 this.filter.show = true
                 this.search.text = ''
-            },
-            fullAddress(address = {}) {
-                return address.street
-                    + (address.number ? ', ' + address.number : '')
-                    + (address.complement ? ' - ' + address.complement : '')
-                    + (address.district ? ' - ' + address.district : '')
             }
         }
     }

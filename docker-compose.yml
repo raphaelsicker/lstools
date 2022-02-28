@@ -13,6 +13,7 @@ services:
             - mysql.lstools
         environment:
             TZ: America/Sao_Paulo
+            PHP_IDE_CONFIG: "serverName=docker"
         volumes:
             - ./:/app
         ports:
