@@ -38,11 +38,11 @@
                 </b-col>
                 <b-col lg="8">
                     <b-overlay :show="overlay.form" class="grid-box">
-                        <uf-edit v-model="id" v-on:reloadGrid="runSearch"/>
+                        <edit v-model="id" v-on:reloadGrid="runSearch"/>
                     </b-overlay>
                 </b-col>
             </b-row>
-            <uf-filter
+            <filter
                 v-model="filters"
                 :show="filter.show"
                 @reloadGrid="runFilter"
@@ -58,16 +58,16 @@
     import CardCallout from "../../components/CardCallout";
     import GridFilter from "../../components/GridFilter";
 
-    import UfFilter from "./filter"
-    import UfEdit from "./edit";
+    import Filter from "./filter"
+    import Edit from "./edit";
     import MainContentTitle from "../../components/MainContentTitle";
     import Address from "../../../models/Address";
 
     export default {
         name: "Address",
         components: {
-            UfEdit,
-            UfFilter,
+            Edit,
+            Filter,
             MainContentTitle,
             GridFilter,
             CardCallout,

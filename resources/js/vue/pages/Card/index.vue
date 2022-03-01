@@ -3,21 +3,26 @@
         <main-content-title title="Cartões" subTitle="Lista os Cartões de Mapas da Congregação"/>
         <div class="inner-content">
             <b-row>
-                <b-col lg="2" class="grid-content">
+                <b-col lg="3" class="grid-content">
                     <b-overlay :show="overlay.grid" class="grid-box">
                         <grid-filter
-                            @filterClick="openFilterModal"
                             @newClick="updateId(null)"
-                            @searchClick="runSearch"
                             :opt="{
                                 search: search,
                                 filter: {show: false},
-                                new: {title: 'Novo Cartão'},
+                                new: {title: 'Novo Cartão'}
                             }">
                             <service-group-select
                                 v-model="service_group_filter"
                                 @input="runFilter"
                             />
+                            <div class="filters-append">
+                                <b-button
+                                    v-b-popover.hover.top="'Imprimir'"
+                                    @click="openPrinterModal">
+                                    <font-awesome-icon icon="fa-solid fa-print" />
+                                </b-button>
+                            </div>
                         </grid-filter>
                         <card-callout
                             v-for="item in localities.data"
@@ -43,12 +48,13 @@
                       {{ error.message }}
                     </b-overlay>
                 </b-col>
-                <b-col lg="10">
+                <b-col lg="9">
                     <b-overlay :show="overlay.form" class="grid-box">
                         <edit v-model="id" v-on:reloadGrid="runSearch"/>
                     </b-overlay>
                 </b-col>
             </b-row>
+            <printer :show="printer.show" @hide="printer.show = false"/>
         </div>
     </section>
 
@@ -60,6 +66,7 @@
     import GridFilter from "../../components/GridFilter";
 
     import Edit from "./edit";
+    import Printer from "./printer";
     import MainContentTitle from "../../components/MainContentTitle";
     import Locality from "../../../models/Locality";
     import ServiceGroupSelect from "../ServiceGroup/select";
@@ -69,6 +76,7 @@
         components: {
             ServiceGroupSelect,
             Edit,
+            Printer,
             MainContentTitle,
             GridFilter,
             CardCallout,
@@ -85,7 +93,7 @@
                     grid: true,
                     form: true
                 },
-                filter: {show: false},
+                printer: {show: false},
                 url: '/maps/cards/',
                 orderBy: {'name': 'asc'},
                 service_group_filter: {}
@@ -146,9 +154,8 @@
                     page: this.localities.current_page
                 });
             },
-            openFilterModal() {
-                this.filter.show = true
-                this.search.text = ''
+            openPrinterModal() {
+                this.printer.show = true
             },
         }
     }

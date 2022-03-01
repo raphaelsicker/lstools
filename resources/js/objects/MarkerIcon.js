@@ -1,7 +1,10 @@
 import {faLocationPin, faLocationDot} from "@fortawesome/free-solid-svg-icons";
 
 export default class MarkerIcon {
-    static new(color = '#007bff', type = 'pin') {
+    static new(
+        color = '#007bff',
+        type = 'pin'
+    ) {
         color = color ?? '#007bff'
         const location = type === 'pin' ? faLocationPin : faLocationDot
 

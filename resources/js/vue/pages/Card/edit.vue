@@ -29,6 +29,7 @@
                                     </b-form-group>
                                 </b-col>
                             </b-row>
+
                             <b-row >
                                 <b-col md="12" class="form-field">
                                     <b-form-group
@@ -52,6 +53,7 @@
                                     </b-form-group>
                                 </b-col>
                             </b-row>
+
                             <b-row >
                                 <b-col v-for="(card, i) in cards" :key="i" md="4" class="form-field">
                                     <b-card class="mb-4">
@@ -131,7 +133,7 @@
             },
             async loadCards() {
                 this.cards = this.locality.id ? await Locality.cards(this.locality.id) : []
-                this.setMarkers()
+                if(this.cards.length) this.setMarkers()
             },
             setMarkers() {
                 this.markers = [];

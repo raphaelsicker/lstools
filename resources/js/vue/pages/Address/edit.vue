@@ -64,14 +64,6 @@
                                             @input="onChangeCity"/>
                                     </b-form-group>
                                 </b-col>
-                                <b-col md="12" class="form-field">
-                                    <b-form-group
-                                        id="fieldset-reference"
-                                        label="Referência"
-                                        label-for="reference">
-                                        <b-form-textarea id="name" v-model="address.reference" trim/>
-                                    </b-form-group>
-                                </b-col>
                                 <b-col md="4" class="form-field">
                                     <b-form-group
                                         id="fieldset-service-group"
@@ -100,6 +92,14 @@
                                             v-model="address.card"
                                             :locality="locality"
                                             @input="address.card_id = address.card.id"/>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="12" class="form-field">
+                                    <b-form-group
+                                        id="fieldset-reference"
+                                        label="Referência"
+                                        label-for="reference">
+                                        <b-form-textarea id="name" v-model="address.reference" trim/>
                                     </b-form-group>
                                 </b-col>
                                 <b-col md="12" class="form-field">
