@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * @property int order
  *
  * @property Locality locality
- * @property Collection adressess
+ * @property Collection | \App\Models\Address[] $addresses
  * @mixin Builder
  */
 class Card extends Model

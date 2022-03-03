@@ -13,6 +13,7 @@ import store from './vuex'
 import VueMask from 'v-mask'
 import VSwatches from 'vue-swatches'
 import GmapVue from 'gmap-vue'
+import VueHtml2pdf from 'vue-html2pdf'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -22,6 +23,7 @@ library.add(faPrint)
 library.add(faLocationPin)
 library.add(faLocationDot)
 
+Vue.use(VueHtml2pdf)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(Router)

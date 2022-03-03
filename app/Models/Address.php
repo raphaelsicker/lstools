@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int id
- * @property string street
- * @property string number
- * @property string complement
- * @property string reference
- * @property string district
- * @property string lat
- * @property string lng
+ * @property int $id
+ * @property string $street
+ * @property string $number
+ * @property string $complement
+ * @property string $reference
+ * @property string $district
+ * @property string $lat
+ * @property string $lng
+ * @property string $complete
  * @property int city_id
  * @property int card_id
  *

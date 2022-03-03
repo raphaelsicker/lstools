@@ -1,5 +1,7 @@
 import Api from "./Base/BaseModel";
 import Locality from "./Locality";
+import querystring from "querystring";
+import axios from "axios";
 
 export default class Card extends Api {
     static apiUrl = '/api/cards'
@@ -12,5 +14,9 @@ export default class Card extends Api {
             locality: Locality.new(),
             addresses: []
         }
+    }
+
+    static async toPrint(params = {}) {
+        return await this.post(params, '/to-print')
     }
 }

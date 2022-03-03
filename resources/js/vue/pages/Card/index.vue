@@ -19,7 +19,7 @@
                             <div class="filters-append">
                                 <b-button
                                     v-b-popover.hover.top="'Imprimir'"
-                                    @click="openPrinterModal">
+                                    @click="goPrinter">
                                     <font-awesome-icon icon="fa-solid fa-print" />
                                 </b-button>
                             </div>
@@ -66,7 +66,6 @@
     import GridFilter from "../../components/GridFilter";
 
     import Edit from "./edit";
-    import Printer from "./printer";
     import MainContentTitle from "../../components/MainContentTitle";
     import Locality from "../../../models/Locality";
     import ServiceGroupSelect from "../ServiceGroup/select";
@@ -76,7 +75,6 @@
         components: {
             ServiceGroupSelect,
             Edit,
-            Printer,
             MainContentTitle,
             GridFilter,
             CardCallout,
@@ -154,8 +152,8 @@
                     page: this.localities.current_page
                 });
             },
-            openPrinterModal() {
-                this.printer.show = true
+            goPrinter() {
+                this.$router.push('/maps/printer')
             },
         }
     }

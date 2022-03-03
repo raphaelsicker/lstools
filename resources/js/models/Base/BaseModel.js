@@ -35,8 +35,8 @@ export default class BaseModel {
         return await this.post(data)
     }
 
-    static async post(data) {
-        return axios.post(this.apiUrl, data)
+    static async post(data, relative = "") {
+        return axios.post(this.apiUrl + relative, data)
             .then(response => response.data)
             .catch(response => response)
     }

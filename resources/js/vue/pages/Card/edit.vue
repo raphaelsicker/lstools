@@ -73,8 +73,6 @@
                                 <b-button variant="info" @click="newCard">Novo Cartão</b-button>
                             </b-row>
 
-
-
                             <template v-slot:footer>
                                 <b-button variant="info" @click="save">Salvar</b-button>
                                 <b-button variant="danger" v-if="locality.id" @click="confirmDelete">Excluir</b-button>
