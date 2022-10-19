@@ -1,4 +1,6 @@
 #!/bin/sh
+return;
+
 set -e
 
 export PROGRAM=$1
